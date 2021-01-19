@@ -1,46 +1,24 @@
-# $$REPO
+# PS-LAB 
 
-> $$1LINER
-
-background details relevant to understanding what this module does
+Powershell lab
 
 ## Usage
 
-```js
-$$EXAMPLE
+```ps
+.\password-generator.ps1 -h
 ```
 
 outputs
 
 ```
-hello world
+help of powershell password generator
 ```
-
-## API
-
-```js
-var $$rePo = require('$$REPO')
-```
-
-See [api_formatting.md](api_formatting.md) for tips.
-
-## Install
-
-With [npm](https://npmjs.org/) installed, run
-
-```
-$ npm install $$REPO
-```
-
-## Acknowledgments
-
-$$REPO was inspired by..
-
-## See Also
-
-- [`noffle/common-readme`](https://github.com/noffle/common-readme)
-- ...
 
 ## License
 
-$$ZEE_LICENSE
+LICENSE.md
+
+## Acknowledgments
+
+- [`noffle/common-readme`](https://github.com/noffle/common-readme)
+

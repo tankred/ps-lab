@@ -16,7 +16,7 @@ help of powershell password generator
 
 ## License
 
-LICENSE.md
+Licensed under [the Apache License, Version 2.0 (the "License")](LICENSE.txt)
 
 ## Acknowledgments
 

@@ -8,6 +8,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Released]
 
+## [0.4.0] - 2021-03-09
+### Added
+- Apache License; Version 2.0, January 2004
+
+## [0.3.2] - 2021-01-19
+### Changed
+- Update readme
+
+## [0.3.1] - 2020-12-01
+### Changed
+- Password-generator change number of chars
+
 ## [0.3.0] - 2020-10-13
 ### Added
 - trash.ps1

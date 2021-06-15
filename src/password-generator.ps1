@@ -29,7 +29,7 @@
 #--------------------------------------------------------------------------------------------
 # START SET
 $debug = 1
-$version = "0.1.1"
+$version = "0.1.2"
 $app = "password-generator_"
 $info = "info"
 $ld = "o:\tmp\log\"
@@ -82,11 +82,10 @@ foreach ($arg in $args)
     write-host "CLI usage"
     $helpinfo = @"
 #SYNTAX
-#    ./password-generator.ps1 -a <a> [-b <b>] 
+#    ./password-generator.ps1
 #
 #PARAMETERS
 #    Required:
-#    	-a a.b
 #    Optional arguments are:
 #    	-verbose  : [0|1] if 0 is specified no userinteraction is required to complete the process.
 #       -h
@@ -101,6 +100,7 @@ foreach ($arg in $args)
 #SAMPLE
 #PS > .\password-generator.ps1 -h
 #PS > .\password-generator.ps1 -V
+#PS > .\password-generator.ps1
 #
 #(END)
 "@;

@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.1] - 2021-06-15
+### Changed
+- Finetuning Generate a password
+
 ## [0.5.0] - 2021-04-27
 ### Added
 - Generate a password

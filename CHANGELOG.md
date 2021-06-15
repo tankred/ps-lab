@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.1] - 2021-06-15
+### Changed
+- Finetuning Generate a password
+
+## [0.5.0] - 2021-04-27
+### Added
+- Generate a password
+
+## [Released]
+
 ## [0.4.2] - 2021-04-01
 ### Added
 - Merge gpx files
@@ -13,8 +23,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.4.1] - 2021-03-30
 ### Changed
 - Moved all ps1 files to src/
-
-## [Released]
 
 ## [0.4.0] - 2021-03-09
 ### Added

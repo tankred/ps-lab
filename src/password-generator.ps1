@@ -29,8 +29,8 @@
 #--------------------------------------------------------------------------------------------
 # START SET
 $debug = 1
-$version = "0.1.0"
-$app = "engine_"
+$version = "0.1.2"
+$app = "password-generator_"
 $info = "info"
 $ld = "o:\tmp\log\"
  # END SET
@@ -50,18 +50,15 @@ function writelog($e){
 function processdata(){
   Param()
   Begin{
-    Write-Host "Start example function..."
+    Write-Host "Generating a random string"
   }
   Process{
     Try{
-      "Do Something here"
       $Password = ([char[]]([char]33..[char]95) + ([char[]]([char]97..[char]126)) + 0..9 | sort {Get-Random})[0..8] -join ''
       $Password
 # Example: Fj-Rs!4p2z
-
 # PS> dir C:\Windows\*.* | Get-Random | Get-FileHash -Algorithm SHA1
 # Example: 819AABA1653415766D4A6B0F5F89833F4E40AA27
-
 # https://www.netmux.com/blog/random-password-cheat-sheet
     }
     Catch{
@@ -71,26 +68,24 @@ function processdata(){
   }
   End{
     If($?){ # only execute if the function was successful.
-      Write-Host "Completed example function."
+      Write-Host "- - -"
     }
   }
 }
 #--------------------------------------------------------------------------------------------
 ## Main
 #--------------------------------------------------------------------------------------------
-clear
+# clear
 foreach ($arg in $args)
 {
-#  Write-Host "Arg: $arg";
   if ($arg -eq "-help" -OR $arg -eq "-h" -OR $arg -eq "--help" -OR $arg -eq "help" ) {
     write-host "CLI usage"
     $helpinfo = @"
 #SYNTAX
-#    ./engine.ps1 -a <a> [-b <b>] 
+#    ./password-generator.ps1
 #
 #PARAMETERS
 #    Required:
-#    	-a a.b
 #    Optional arguments are:
 #    	-verbose  : [0|1] if 0 is specified no userinteraction is required to complete the process.
 #       -h
@@ -103,8 +98,9 @@ foreach ($arg in $args)
 #       --version
 #
 #SAMPLE
-#PS > .\engine.ps1 -h
-#PS > .\engine.ps1 -V
+#PS > .\password-generator.ps1 -h
+#PS > .\password-generator.ps1 -V
+#PS > .\password-generator.ps1
 #
 #(END)
 "@;
@@ -131,6 +127,5 @@ processdata;
 writelog("--------------------------------------")	
 ## HISTORY history
 #"[x] boilerplate 0.1.0"
-#
 ## END HISTORY
 "EOF"

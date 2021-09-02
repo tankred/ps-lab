@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Released]
 
+## [0.6.1] - 2021-09-02
+### Changed
+- Generate a password without special chars
+
 ## [0.6.0] - 2021-09-01
 ### Added
 - Bump version to 0.6.0

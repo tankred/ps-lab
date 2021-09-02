@@ -1,5 +1,6 @@
 .gitignore~
 .gitignore.un~
+*.swp
 *.un~
 *.md~
 *.ps1~

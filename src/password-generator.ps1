@@ -7,8 +7,8 @@
 #NAME
 #
 #SYNOPSIS
-# Name: 
-# Purpose: 
+# Name: password-generator.ps1 
+# Purpose: generate a random string (aka password)  
 #
 #DESCRIPTION
 #
@@ -29,9 +29,9 @@
 #--------------------------------------------------------------------------------------------
 # START SET
 $debug = 1
-$version = "0.2.0"
+$version = "0.2.1"
 $app = "password-generator_"
-$info = "info"
+$info = $app
 $ld = "o:\tmp\log\"
  # END SET
 $month = "00"+(get-date).month

@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Released]
 
+## [0.6.3] - 2022-02-17
+### Changed
+- Update password generator add [a-z][A-Z]\d
+
 ## [0.6.2] - 2021-10-28
 ### Changed
 - Update info password generator

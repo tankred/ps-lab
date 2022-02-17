@@ -29,7 +29,7 @@
 #--------------------------------------------------------------------------------------------
 # START SET
 $debug = 1
-$version = "0.2.1"
+$version = "0.2.2"
 $app = "password-generator_"
 $info = $app
 $ld = "o:\tmp\log\"
@@ -54,9 +54,19 @@ function processdata(){
   }
   Process{
     Try{
-      # $Password = ([char[]]([char]33..[char]95) + ([char[]]([char]97..[char]126)) + 0..9 | sort {Get-Random})[0..24] -join ''
+      $Password = ([char[]]([char]33..[char]95) + ([char[]]([char]97..[char]126)) + 0..9 | sort {Get-Random})[0..24] -join ''
+      $Password
       # without special chars
       $Password = ([char[]]([char]65..[char]90) + ([char[]]([char]97..[char]126)) + 0..9 | sort {Get-Random})[0..24] -join ''
+      $Password
+
+      $Password = ([char[]]([char]97..[char]122) + 0..9 | sort {Get-Random})[0..24] -join ''
+      $Password
+
+      $Password = ([char[]]([char]65..[char]90) + 0..9 | sort {Get-Random})[0..24] -join ''
+      $Password
+
+      $Password = ([char[]]([char]65..[char]90) + [char[]]([char]97..[char]122) + 0..9 | sort {Get-Random})[0..24] -join ''
       $Password
 # Example: Fj-Rs!4p2z
 # PS> dir C:\Windows\*.* | Get-Random | Get-FileHash -Algorithm SHA1

@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.6.5] - 2025-11-06
+### Added
+- Backup WSL ps 
+
 ## [0.6.4] - 2025-11-05
 ### Added
 - Kitchensink ps 

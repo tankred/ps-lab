@@ -5,8 +5,8 @@
 #NAME
 #
 #SYNOPSIS
-# Name: "%p
-# Purpose: 
+# Name: backup-WSL.ps1 
+# Purpose: backup WSL (F42)
 #
 #DESCRIPTION
 #
@@ -27,10 +27,10 @@
 #--------------------------------------------------------------------------------------------
 # START SET
 $debug = 1
-$version = "0.1.0"
-$app = "%p"
-$info = "info"
-$ld = "c:\tmp\log\"
+$version = "0.1.1"
+$app = "backup-WSL.ps1"
+$info = "backup WSL"
+$ld = "o:\tmp\log\"
  # END SET
 $month = "00"+(get-date).month
 $month = $month.substring($month.length - 2 , 2)

@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.6.6] - 2025-11-07
+### Changed
+- WIP: Slog backup WSL ps 
+
 ## [0.6.5] - 2025-11-06
 ### Added
 - Backup WSL ps 

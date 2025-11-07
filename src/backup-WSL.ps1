@@ -27,10 +27,10 @@
 #--------------------------------------------------------------------------------------------
 # START SET
 $debug = 1
-$version = "0.1.1"
+$version = "0.1.2"
 $app = "backup-WSL.ps1"
 $info = "backup WSL"
-$ld = "o:\tmp\log\"
+$ld = "c:\tmp\log\"
  # END SET
 $month = "00"+(get-date).month
 $month = $month.substring($month.length - 2 , 2)
@@ -48,11 +48,15 @@ function writelog($e){
 function processdata(){
   Param()
   Begin{
-    Write-Host "Start example function..."
+    wsl -l -v # show installed distro(s)"
+    wsl --list --running
   }
   Process{
     Try{
-      "Do Something here"
+      " # backup F42 "
+      " sudo systemctl poweroff # send poweroff to avoid crash in last log "
+      # implement wait for enter
+      "wsl --export Ubuntu wsl-ubuntu.tar # backup distro AND will stop a distro from running"
     }
     Catch{
       "Something went wrong."

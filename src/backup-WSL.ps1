@@ -6,7 +6,7 @@
 #
 #SYNOPSIS
 # Name: backup-WSL.ps1 
-# Purpose: backup WSL (F42)
+# Purpose: backup WSL distro 
 #
 #DESCRIPTION
 #
@@ -15,19 +15,11 @@
 #NOTES
 #
 #--------------------------------------------------------------------------------------------
-#Param
-#--------------------------------------------------------------------------------------------
-# PARAM ( 
-    # [string]$InitialDirectory = $(throw "-InitialDirectory is required."),
- #   [switch]$Add = $false
-# )
-
-#--------------------------------------------------------------------------------------------
 #Ini
 #--------------------------------------------------------------------------------------------
 # START SET
 $debug = 1
-$version = "0.1.2"
+$version = "0.1.3"
 $app = "backup-WSL.ps1"
 $info = "backup WSL"
 $ld = "c:\tmp\log\"
@@ -49,14 +41,17 @@ function processdata(){
   Param()
   Begin{
     wsl -l -v # show installed distro(s)"
-    wsl --list --running
+    # wsl --list --running
   }
   Process{
     Try{
-      " # backup F42 "
-      " sudo systemctl poweroff # send poweroff to avoid crash in last log "
+      $DISTRO='FedoraLinux-43'
+      "# backup $DISTRO "
+      "sudo systemctl poweroff # send poweroff to avoid crash in last log "
       # implement wait for enter
-      "wsl --export Ubuntu wsl-ubuntu.tar # backup distro AND will stop a distro from running"
+      wsl --terminate $DISTRO # stop distro 
+      # backup distro AND will stop a distro from running
+      wsl --export $DISTRO ..\data\wsl-$DISTRO-$year$month$dayn.tar 
     }
     Catch{
       "Something went wrong."
@@ -65,7 +60,8 @@ function processdata(){
   }
   End{
     If($?){ # only execute if the function was successful.
-      Write-Host "Completed example function."
+      "list running distro"
+      wsl --list --running
     }
   }
 }
@@ -80,13 +76,9 @@ foreach ($arg in $args)
     write-host "CLI usage"
     $helpinfo = @"
 #SYNTAX
-#    .\$app -a <a> [-b <b>] 
+#    .\$app
 #
-#PARAMETERS
-#    Required:
-#    	-a a.b
-#    Optional arguments are:
-#    	-verbose  : [0|1] if 0 is specified no userinteraction is required to complete the process.
+#OPTIONAL PARAMETERS
 #       -h
 #       help
 #    	-help

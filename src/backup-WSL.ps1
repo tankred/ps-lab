@@ -19,10 +19,11 @@
 #--------------------------------------------------------------------------------------------
 # START SET
 $debug = 1
-$version = "0.1.3"
+$version = "0.1.5"
 $app = "backup-WSL.ps1"
 $info = "backup WSL"
 $ld = "c:\tmp\log\"
+$backupdir = "C:\office\mirror\WSL-Fedora"
  # END SET
 $month = "00"+(get-date).month
 $month = $month.substring($month.length - 2 , 2)
@@ -51,7 +52,9 @@ function processdata(){
       # implement wait for enter
       wsl --terminate $DISTRO # stop distro 
       # backup distro AND will stop a distro from running
-      wsl --export $DISTRO ..\data\wsl-$DISTRO-$year$month$dayn.tar 
+       $target = $backupdir + "\wsl-" + $DISTRO + "-" + $year + $month + $dayn + ".tar"
+       $target
+      wsl --export $DISTRO $target
     }
     Catch{
       "Something went wrong."

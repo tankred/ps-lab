@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [Released]
+
+## [0.7.0] - 2025-12-02
+### Changed
+- Backup WSL F43 
+
 ## [0.6.9] - 2025-11-28
 ### Changed
 - WIP: Slog backup WSL F43 
@@ -29,8 +35,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.6.4] - 2025-11-05
 ### Added
 - Kitchensink ps 
-
-## [Released]
 
 ## [0.6.3] - 2022-02-17
 ### Changed

@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.7.0] - 2025-12-03
+### Changed
+- Backup WSL F 42-43 switch
+
 ## [Released]
 
 ## [0.7.0] - 2025-12-02

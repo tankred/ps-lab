@@ -25,7 +25,7 @@ PARAM (
 #--------------------------------------------------------------------------------------------
 # START SET
 $debug = 1
-$version = "0.1.6"
+$version = "0.1.7"
 $app = "backup-WSL.ps1"
 $info = "backup WSL"
 $ld = "c:\tmp\log\"
@@ -47,20 +47,23 @@ function writelog($e){
 function processdata(){
   Param()
   Begin{
+    $distro
     wsl -l -v # show installed distro(s)"
     # wsl --list --running
   }
   Process{
     Try{
-      $DISTRO='FedoraLinux-43'
-      "# backup $DISTRO "
+      $BACKUPDISTRO='FedoraLinux-43'
+      "Case sensitive? N"
+      $distro
+      "# backup $BACKUPDISTRO "
       "sudo systemctl poweroff # send poweroff to avoid crash in last log "
       # implement wait for enter
-      wsl --terminate $DISTRO # stop distro 
+      wsl --terminate $BACKUPDISTRO # stop distro 
       # backup distro AND will stop a distro from running
-       $target = $backupdir + "\wsl-" + $DISTRO + "-" + $year + $month + $dayn + ".tar"
+       $target = $backupdir + "\wsl-" + $BACKUPDISTRO + "-" + $year + $month + $dayn + ".tar"
        $target
-      wsl --export $DISTRO $target
+      wsl --export $BACKUPDISTRO $target
     }
     Catch{
       "Something went wrong."
@@ -77,7 +80,6 @@ function processdata(){
 #--------------------------------------------------------------------------------------------
 ## Main
 #--------------------------------------------------------------------------------------------
-clear
 foreach ($arg in $args)
 {
 #  Write-Host "Arg: $arg";
@@ -111,6 +113,10 @@ foreach ($arg in $args)
     write-host "version $version"
     exit;
   }
+  if ($arg -eq "-distro" -OR $arg -eq "-d") {
+    "Distro specified"
+    $distro
+  }
 }
 $hdata = [string]$args[0]
 write-host $hdata
@@ -120,8 +126,8 @@ write-host $info
 "---------------------------------------------------"
 writelog(get-date)
 writelog($app+$version)
-############################################################################	
+#####################################################
 processdata;
-############################################################################	
+#####################################################
 writelog("--------------------------------------")	
 "EOF"

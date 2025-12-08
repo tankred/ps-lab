@@ -25,7 +25,7 @@ PARAM (
 #--------------------------------------------------------------------------------------------
 # START SET
 $debug = 1
-$version = "0.1.7"
+$version = "0.1.8"
 $app = "backup-WSL.ps1"
 $info = "backup WSL"
 $ld = "c:\tmp\log\"
@@ -53,8 +53,7 @@ function processdata(){
   }
   Process{
     Try{
-      $BACKUPDISTRO='FedoraLinux-43'
-      "Case sensitive? N"
+      $BACKUPDISTRO=$distro
       $distro
       "# backup $BACKUPDISTRO "
       "sudo systemctl poweroff # send poweroff to avoid crash in last log "
@@ -102,6 +101,7 @@ foreach ($arg in $args)
 #SAMPLE
 #PS > .\$app -h
 #PS > .\$app -V
+#PS > .\backup-WSL.ps1 -distro 'FedoraLinux-43'
 #
 #(END)
 "@;

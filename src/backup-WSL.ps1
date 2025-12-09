@@ -25,7 +25,7 @@ PARAM (
 #--------------------------------------------------------------------------------------------
 # START SET
 $debug = 1
-$version = "0.1.8"
+$version = "0.1.9"
 $app = "backup-WSL.ps1"
 $info = "backup WSL"
 $ld = "c:\tmp\log\"
@@ -44,6 +44,14 @@ function writelog($e){
 	Add-Content $log $e""
 }
 
+function waitforenter {
+    param(
+        [string]$Message = "Press Enter to Continue..."
+    )
+    Write-Host $Message
+    $null = Read-Host
+}
+
 function processdata(){
   Param()
   Begin{
@@ -54,10 +62,15 @@ function processdata(){
   Process{
     Try{
       $BACKUPDISTRO=$distro
-      $distro
-      "# backup $BACKUPDISTRO "
+      # $distro
+      " IF $distro IS Running "
+      " HALT script "
+      " Send poweroff to running distro "
+      " Continue script " 
       "sudo systemctl poweroff # send poweroff to avoid crash in last log "
       # implement wait for enter
+      waitforenter
+      "# backup $BACKUPDISTRO "
       wsl --terminate $BACKUPDISTRO # stop distro 
       # backup distro AND will stop a distro from running
        $target = $backupdir + "\wsl-" + $BACKUPDISTRO + "-" + $year + $month + $dayn + ".tar"

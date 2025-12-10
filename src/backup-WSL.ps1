@@ -25,7 +25,7 @@ PARAM (
 #--------------------------------------------------------------------------------------------
 # START SET
 $debug = 1
-$version = "0.1.9"
+$version = "0.2.0"
 $app = "backup-WSL.ps1"
 $info = "backup WSL"
 $ld = "c:\tmp\log\"
@@ -52,24 +52,34 @@ function waitforenter {
     $null = Read-Host
 }
 
+function check($distroparam) {
+  $distroparam
+  $wslinfo = wsl --list --running
+  if ($wslinfo -eq 'Er zijn geen actieve distributies.') { 
+    "continue" 
+      " Continue script " 
+  }
+  else {
+      " IF $distroparam IS Running "
+      " HALT script "
+      " Send poweroff to running distro "
+      "sudo systemctl poweroff"
+     waitforenter
+  }
+}
+
 function processdata(){
   Param()
   Begin{
     $distro
     wsl -l -v # show installed distro(s)"
-    # wsl --list --running
   }
   Process{
     Try{
       $BACKUPDISTRO=$distro
       # $distro
-      " IF $distro IS Running "
-      " HALT script "
-      " Send poweroff to running distro "
-      " Continue script " 
-      "sudo systemctl poweroff # send poweroff to avoid crash in last log "
-      # implement wait for enter
-      waitforenter
+      check $distro
+      # waitforenter
       "# backup $BACKUPDISTRO "
       wsl --terminate $BACKUPDISTRO # stop distro 
       # backup distro AND will stop a distro from running

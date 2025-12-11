@@ -25,7 +25,7 @@ PARAM (
 #--------------------------------------------------------------------------------------------
 # START SET
 $debug = 1
-$version = "0.2.0"
+$version = "0.2.1"
 $app = "backup-WSL.ps1"
 $info = "backup WSL"
 $ld = "c:\tmp\log\"
@@ -60,6 +60,9 @@ function check($distroparam) {
       " Continue script " 
   }
   else {
+    "--START WSL INFO --"
+    $wslinfo
+    "-- END  WSL INFO --"
       " IF $distroparam IS Running "
       " HALT script "
       " Send poweroff to running distro "

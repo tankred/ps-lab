@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.7.5] - 2025-12-11
+### Changed
+- WIP: Check WSL status
+
 ## [0.7.4] - 2025-12-10
 ### Changed
 - WIP: Check WSL status

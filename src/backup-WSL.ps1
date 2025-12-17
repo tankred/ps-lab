@@ -59,8 +59,8 @@ function check($distroparam) {
   $arrwslinfo = $wslinfo.Split("`r`n")
   # check if multiple distros are spinning
 Write-Host "Total Elements in array-->" $arrwslinfo.Count
-Write-Host "First element in array-->" $arrwslinfo[0]
-Write-Host "Second element in array-->" $arrwslinfo[2]
+# Write-Host "First element in array-->" $arrwslinfo[0]
+# Write-Host "Second element in array-->" $arrwslinfo[2]
   if ($wslinfo -eq 'Er zijn geen actieve distributies.') { 
     "continue" 
       " Continue script " 
@@ -70,12 +70,14 @@ Write-Host "Second element in array-->" $arrwslinfo[2]
     $arrwslinfo[2]
     "-- END  WSL INFO --"
       " IF $distroparam IS Running "
-      if ($arrwslinfo[2] -contains $distroparam) {
-      " HALT script "
-      " Send poweroff to running distro "
-      "sudo systemctl poweroff"
-      } 
-     waitforenter
+      foreach ($item in $arrwslinfo) {
+        if ($item -contains $distroparam) {
+          " HALT script "
+          " Send poweroff to running distro "
+          "sudo systemctl poweroff"
+          waitforenter
+        } 
+      }
   }
 }
 

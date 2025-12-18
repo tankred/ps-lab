@@ -25,7 +25,7 @@ PARAM (
 #--------------------------------------------------------------------------------------------
 # START SET
 $debug = 1
-$version = "0.2.2"
+$version = "0.2.3"
 $app = "backup-WSL.ps1"
 $info = "backup WSL"
 $ld = "c:\tmp\log\"
@@ -71,13 +71,14 @@ Write-Host "Total Elements in array-->" $arrwslinfo.Count
     "-- END  WSL INFO --"
       " IF $distroparam IS Running "
       foreach ($item in $arrwslinfo) {
+        $item
         if ($item -contains $distroparam) {
           " HALT script "
           " Send poweroff to running distro "
           "sudo systemctl poweroff"
-          waitforenter
         } 
       }
+          waitforenter
   }
 }
 

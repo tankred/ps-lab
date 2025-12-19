@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.8.0] - 2025-12-19
 ### Changed
 - WIP: Check WSL status
+- Ignore codereview agent feedback
 
 ## [0.7.9] - 2025-12-18
 ### Changed

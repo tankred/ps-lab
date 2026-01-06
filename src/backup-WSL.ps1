@@ -14,12 +14,18 @@
 #
 #NOTES
 #
-#--------------------------------------------------------------------------------------------
+#------------------------------------------------------------------
+#Param
+#------------------------------------------------------------------
+PARAM ( 
+    [string]$distro = "F42"
+)
+#------------------------------------------------------------------
 #Ini
-#--------------------------------------------------------------------------------------------
+#------------------------------------------------------------------
 # START SET
 $debug = 1
-$version = "0.1.5"
+$version = "0.2.3"
 $app = "backup-WSL.ps1"
 $info = "backup WSL"
 $ld = "c:\tmp\log\"
@@ -31,30 +37,69 @@ $year = (get-date).year
 $da = "00"+(get-date).day 
 $dayn = $da.substring($da.length - 2,2)
 $log = $ld + "pslog_"+$year+$month+$dayn+".txt"
-#--------------------------------------------------------------------------------------------
+#------------------------------------------------------------------
 ## Functions
-#--------------------------------------------------------------------------------------------
+#------------------------------------------------------------------
 function writelog($e){
 	Add-Content $log $e""
+}
+
+function waitforenter {
+    param(
+        [string]$Message = "Press Enter to Continue..."
+    )
+    Write-Host $Message
+    $null = Read-Host
+}
+
+function check($distroparam) {
+  $distroparam
+  $wslinfo = wsl --list --running
+  # $singlelinewslrunning = $wslinfo -replace "`r?`n(?!`r?`n)", ''
+  $arrwslinfo = $wslinfo.Split("`r`n")
+  # check if multiple distros are spinning
+Write-Host "Total Elements in array-->" $arrwslinfo.Count
+# Write-Host "First element in array-->" $arrwslinfo[0]
+# Write-Host "Second element in array-->" $arrwslinfo[2]
+  if ($wslinfo -eq 'Er zijn geen actieve distributies.') { 
+    "continue" 
+      " Continue script " 
+  }
+  else {
+    # $arrwslinfo[2]
+      " IF $distroparam IS Running "
+      "--START WSL INFO --"
+      foreach ($item in $arrwslinfo) {
+        $item
+        if ($item -contains $distroparam) {
+          " HALT script "
+          " Send poweroff to running distro "
+          "sudo systemctl poweroff"
+        } 
+      }
+      "-- END  WSL INFO --"
+      waitforenter
+  }
 }
 
 function processdata(){
   Param()
   Begin{
+    $distro
     wsl -l -v # show installed distro(s)"
-    # wsl --list --running
   }
   Process{
     Try{
-      $DISTRO='FedoraLinux-43'
-      "# backup $DISTRO "
-      "sudo systemctl poweroff # send poweroff to avoid crash in last log "
-      # implement wait for enter
-      wsl --terminate $DISTRO # stop distro 
+      $BACKUPDISTRO=$distro
+      # $distro
+      check $distro
+      # waitforenter
+      "# backup $BACKUPDISTRO "
+      wsl --terminate $BACKUPDISTRO # stop distro 
       # backup distro AND will stop a distro from running
-       $target = $backupdir + "\wsl-" + $DISTRO + "-" + $year + $month + $dayn + ".tar"
+       $target = $backupdir + "\wsl-" + $BACKUPDISTRO + "-" + $year + $month + $dayn + ".tar"
        $target
-      wsl --export $DISTRO $target
+      wsl --export $BACKUPDISTRO $target
     }
     Catch{
       "Something went wrong."
@@ -68,10 +113,9 @@ function processdata(){
     }
   }
 }
-#--------------------------------------------------------------------------------------------
+#------------------------------------------------------------------
 ## Main
-#--------------------------------------------------------------------------------------------
-clear
+#------------------------------------------------------------------
 foreach ($arg in $args)
 {
 #  Write-Host "Arg: $arg";
@@ -79,7 +123,7 @@ foreach ($arg in $args)
     write-host "CLI usage"
     $helpinfo = @"
 #SYNTAX
-#    .\$app
+#    .\$app -distro <string>
 #
 #OPTIONAL PARAMETERS
 #       -h
@@ -94,6 +138,7 @@ foreach ($arg in $args)
 #SAMPLE
 #PS > .\$app -h
 #PS > .\$app -V
+#PS > .\backup-WSL.ps1 -distro 'FedoraLinux-43'
 #
 #(END)
 "@;
@@ -105,6 +150,10 @@ foreach ($arg in $args)
     write-host "version $version"
     exit;
   }
+  if ($arg -eq "-distro" -OR $arg -eq "-d") {
+    "Distro specified"
+    $distro
+  }
 }
 $hdata = [string]$args[0]
 write-host $hdata
@@ -114,8 +163,8 @@ write-host $info
 "---------------------------------------------------"
 writelog(get-date)
 writelog($app+$version)
-############################################################################	
+#####################################################
 processdata;
-############################################################################	
+#####################################################
 writelog("--------------------------------------")	
 "EOF"

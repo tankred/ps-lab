@@ -8,6 +8,55 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Released]
 
+## [0.8.1] - 2026-01-06
+### Changed
+- Check WSL status (issue 5)
+
+## [0.8.0] - 2025-12-19
+### Changed
+- WIP: Check WSL status
+- Ignore codereview agent feedback
+
+## [0.7.9] - 2025-12-18
+### Changed
+- WIP: Check WSL status
+
+## [0.7.8] - 2025-12-17
+### Changed
+- WIP: Check WSL status
+
+## [0.7.7] - 2025-12-15
+### Changed
+- WIP: Check WSL status
+
+## [0.7.6] - 2025-12-12
+### Changed
+- WIP: Check WSL status
+
+## [0.7.5] - 2025-12-11
+### Changed
+- WIP: Check WSL status
+
+## [0.7.4] - 2025-12-10
+### Changed
+- WIP: Check WSL status
+
+## [0.7.3] - 2025-12-09
+### Changed
+- WIP: Backup WSL Poweroff system to avoid crash log
+
+## [0.7.2] - 2025-12-08
+### Changed
+- WIP: Backup WSL F 42-43 switch
+
+## [0.7.1] - 2025-12-04
+### Changed
+- WIP: Backup WSL F 42-43 switch
+
+## [0.7.0] - 2025-12-03
+### Changed
+- Backup WSL F 42-43 switch
+
 ## [0.7.0] - 2025-12-02
 ### Changed
 - Backup WSL F43 

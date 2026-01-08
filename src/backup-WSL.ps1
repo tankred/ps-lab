@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------
-# PowerShell 7.5 
+# PowerShell 7.5.4 
 # by Kurt Duyck (kurt.duyck@vives.be)
 #
 #NAME
@@ -25,10 +25,11 @@ PARAM (
 #------------------------------------------------------------------
 # START SET
 $debug = 1
-$version = "0.2.3"
+$version = "0.2.4"
 $app = "backup-WSL.ps1"
 $info = "backup WSL"
-$ld = "c:\tmp\log\"
+$ld = "C:\tmp\log" 
+if (!(Test-Path $ld)) { New-Item -ItemType Directory -Path $ld -Force }
 $backupdir = "C:\office\mirror\WSL-Fedora"
  # END SET
 $month = "00"+(get-date).month
@@ -40,15 +41,17 @@ $log = $ld + "pslog_"+$year+$month+$dayn+".txt"
 #------------------------------------------------------------------
 ## Functions
 #------------------------------------------------------------------
-function writelog($e){
-	Add-Content $log $e""
-}
+# function writelog($e){
+# 	Add-Content $log $e""
+# }
+function writelog { param([string]$Message) try { Add-Content -Path $log -Value $Message } catch { Write-Warning "Kon niet naar logbestand schrijven: $_" } }
 
 function waitforenter {
     param(
         [string]$Message = "Press Enter to Continue..."
     )
-    Write-Host $Message
+    # Write-Host $Message
+    Write-Output $Message
     $null = Read-Host
 }
 
@@ -58,7 +61,7 @@ function check($distroparam) {
   # $singlelinewslrunning = $wslinfo -replace "`r?`n(?!`r?`n)", ''
   $arrwslinfo = $wslinfo.Split("`r`n")
   # check if multiple distros are spinning
-Write-Host "Total Elements in array-->" $arrwslinfo.Count
+Write-Output "Total Elements in array-->" $arrwslinfo.Count
 # Write-Host "First element in array-->" $arrwslinfo[0]
 # Write-Host "Second element in array-->" $arrwslinfo[2]
   if ($wslinfo -eq 'Er zijn geen actieve distributies.') { 
@@ -118,9 +121,9 @@ function processdata(){
 #------------------------------------------------------------------
 foreach ($arg in $args)
 {
-#  Write-Host "Arg: $arg";
+#?  Write-Host "Arg: $arg";
   if ($arg -eq "-help" -OR $arg -eq "-h" -OR $arg -eq "--help" -OR $arg -eq "help" ) {
-    write-host "CLI usage"
+    write-output "CLI usage"
     $helpinfo = @"
 #SYNTAX
 #    .\$app -distro <string>
@@ -142,12 +145,12 @@ foreach ($arg in $args)
 #
 #(END)
 "@;
-    write-host $helpinfo -fore white;
+    write-output $helpinfo -fore white;
     exit;
   } 
   if ($arg -eq "-version" -OR $arg -eq "--version" -OR $arg -eq "version" -OR $arg -eq "-V") {
-    write-host "$app"
-    write-host "version $version"
+    write-output "$app"
+    write-output "version $version"
     exit;
   }
   if ($arg -eq "-distro" -OR $arg -eq "-d") {
@@ -156,10 +159,10 @@ foreach ($arg in $args)
   }
 }
 $hdata = [string]$args[0]
-write-host $hdata
-write-host ">"$app$version
+write-output $hdata
+# write-output ">"$app$version
 "---------------------------------------------------"
-write-host $info
+write-output $info
 "---------------------------------------------------"
 writelog(get-date)
 writelog($app+$version)

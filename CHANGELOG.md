@@ -8,6 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Released]
 
+## [0.8.3] - 2026-01-08
+### Changed
+-  Merge copilot codereview (issue 9)
+
+## [0.8.2] - 2026-01-07
+### Changed
+-  Implement copilot codereview (issue 9)
+
 ## [0.8.1] - 2026-01-06
 ### Changed
 - Check WSL status (issue 5)

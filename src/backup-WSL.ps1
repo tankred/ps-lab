@@ -25,7 +25,7 @@ PARAM (
 #------------------------------------------------------------------
 # START SET
 $debug = 1
-$version = "0.2.4"
+$version = "0.2.5"
 $app = "backup-WSL.ps1"
 $info = "backup WSL"
 $ld = "C:\tmp\log" 
@@ -123,7 +123,7 @@ foreach ($arg in $args)
 {
 #?  Write-Host "Arg: $arg";
   if ($arg -eq "-help" -OR $arg -eq "-h" -OR $arg -eq "--help" -OR $arg -eq "help" ) {
-    write-output "CLI usage"
+    #? write-output "CLI usage"
     $helpinfo = @"
 #SYNTAX
 #    .\$app -distro <string>
@@ -145,11 +145,11 @@ foreach ($arg in $args)
 #
 #(END)
 "@;
-    write-output $helpinfo -fore white;
+    write-host $helpinfo -fore yellow;
     exit;
   } 
   if ($arg -eq "-version" -OR $arg -eq "--version" -OR $arg -eq "version" -OR $arg -eq "-V") {
-    write-output "$app"
+    # write-output "$app"
     write-output "version $version"
     exit;
   }
@@ -162,7 +162,8 @@ $hdata = [string]$args[0]
 write-output $hdata
 # write-output ">"$app$version
 "---------------------------------------------------"
-write-output $info
+# write-output $info
+write-output $info $distro
 "---------------------------------------------------"
 writelog(get-date)
 writelog($app+$version)

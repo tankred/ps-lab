@@ -25,7 +25,7 @@ PARAM (
 #------------------------------------------------------------------
 # START SET
 $debug = 1
-$version = "0.2.5"
+$version = "0.2.6"
 $app = "backup-WSL.ps1"
 $info = "backup WSL"
 $ld = "C:\tmp\log" 
@@ -82,6 +82,22 @@ Write-Output "Total Elements in array-->" $arrwslinfo.Count
       }
       "-- END  WSL INFO --"
       waitforenter
+  }
+}
+
+function prunebackups() {
+  Begin{
+    "List backups"
+    # ls *FedoraLinux-42* -name
+  }
+  Process{
+    Try{
+    "Try remove old backups"
+    }
+    Catch{
+      "Something went wrong."
+      Break
+    }
   }
 }
 
@@ -169,6 +185,7 @@ writelog(get-date)
 writelog($app+$version)
 #####################################################
 processdata;
+prunebackups;
 #####################################################
 writelog("--------------------------------------")	
 "EOF"

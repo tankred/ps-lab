@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - WIP: List old backups
 - Setup prune forget --keep-daily 7 --keep-weekly 5 --keep-monthly 12 --keep-yearly 75
+- Remove 'clear' from kitchensink
 
 ## [0.8.5] - 2026-01-13
 ### Changed

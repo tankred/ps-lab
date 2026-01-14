@@ -89,10 +89,14 @@ function prunebackups() {
   Begin{
     "List backups"
     # ls *FedoraLinux-42* -name
+    $backupdir
+    $distro
+    ls $backupdir\*$distro* -name
   }
   Process{
     Try{
     "Try remove old backups"
+    "forget --keep-daily 7 --keep-weekly 5 --keep-monthly 12 --keep-yearly 75"
     }
     Catch{
       "Something went wrong."

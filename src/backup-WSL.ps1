@@ -25,7 +25,7 @@ PARAM (
 #------------------------------------------------------------------
 # START SET
 $debug = 1
-$version = "0.2.6"
+$version = "0.2.7"
 $app = "backup-WSL.ps1"
 $info = "backup WSL"
 $ld = "C:\tmp\log" 
@@ -50,7 +50,7 @@ function waitforenter {
     param(
         [string]$Message = "Press Enter to Continue..."
     )
-    # Write-Host $Message
+    #? Write-Host $Message
     Write-Output $Message
     $null = Read-Host
 }
@@ -88,15 +88,17 @@ Write-Output "Total Elements in array-->" $arrwslinfo.Count
 function prunebackups() {
   Begin{
     "List backups"
-    # ls *FedoraLinux-42* -name
-    $backupdir
+    #? ls *FedoraLinux-42* -name
+    # $backupdir
     $distro
     ls $backupdir\*$distro* -name
   }
   Process{
     Try{
-    "Try remove old backups"
-    "forget --keep-daily 7 --keep-weekly 5 --keep-monthly 12 --keep-yearly 75"
+      "Try remove old backups"
+      "Goal: forget --keep-daily 7 --keep-weekly 5 --keep-monthly 12 --keep-yearly 75"
+      "For now: Keep 7"
+      Get-ChildItem -Recurse -File $backupdir\*$distro* | Sort CreationTime -desc | Select -skip 7 | Remove-Item -Force
     }
     Catch{
       "Something went wrong."

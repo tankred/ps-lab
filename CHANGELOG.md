@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.8.7] - 2026-01-15
+### Changed
+- WIP: Keep last 7 backups
+
 ## [0.8.6] - 2026-01-14
 ### Changed
 - WIP: List old backups

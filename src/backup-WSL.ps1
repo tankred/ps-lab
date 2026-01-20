@@ -24,14 +24,14 @@ PARAM (
 #Ini
 #------------------------------------------------------------------
 # START SET
-$debug = 1
-$version = "0.2.8"
-$app = "backup-WSL.ps1"
-$info = "backup WSL"
-$ld = "C:\tmp\log" 
-if (!(Test-Path $ld)) { New-Item -ItemType Directory -Path $ld -Force }
-$backupdir = "C:\office\mirror\WSL-Fedora"
- # END SET
+  $debug = 1
+  $version = "0.3.0"
+  $app = "backup-WSL.ps1"
+  $info = "backup WSL"
+  $ld = "C:\tmp\log" 
+  if (!(Test-Path $ld)) { New-Item -ItemType Directory -Path $ld -Force }
+  $backupdir = "C:\office\mirror\WSL-Fedora"
+# END SET
 $month = "00"+(get-date).month
 $month = $month.substring($month.length - 2 , 2)
 $year = (get-date).year
@@ -50,7 +50,6 @@ function waitforenter {
     param(
         [string]$Message = "Press Enter to Continue..."
     )
-    #? Write-Host $Message
     Write-Output $Message
     $null = Read-Host
 }
@@ -61,9 +60,9 @@ function check($distroparam) {
   # $singlelinewslrunning = $wslinfo -replace "`r?`n(?!`r?`n)", ''
   $arrwslinfo = $wslinfo.Split("`r`n")
   # check if multiple distros are spinning
-Write-Output "Total Elements in array-->" $arrwslinfo.Count
-# Write-Host "First element in array-->" $arrwslinfo[0]
-# Write-Host "Second element in array-->" $arrwslinfo[2]
+  Write-Output "Total Elements in array-->" $arrwslinfo.Count
+  # Write-Host "First element in array-->" $arrwslinfo[0]
+  # Write-Host "Second element in array-->" $arrwslinfo[2]
   if ($wslinfo -eq 'Er zijn geen actieve distributies.') { 
     "continue" 
       " Continue script " 
@@ -88,8 +87,7 @@ Write-Output "Total Elements in array-->" $arrwslinfo.Count
 function prunebackups() {
   Begin{
     "List backups"
-    #? ls *FedoraLinux-42* -name
-    # $backupdir
+    #? $backupdir
     $distro
     ls $backupdir\*$distro* -name
   }
@@ -122,8 +120,8 @@ function processdata(){
       "# backup $BACKUPDISTRO "
       wsl --terminate $BACKUPDISTRO # stop distro 
       # backup distro AND will stop a distro from running
-       $target = $backupdir + "\wsl-" + $BACKUPDISTRO + "-" + $year + $month + $dayn + ".tar"
-       $target
+      $target = $backupdir + "\wsl-" + $BACKUPDISTRO + "-" + $year + $month + $dayn + ".tar"
+      $target
       wsl --export $BACKUPDISTRO $target
     }
     Catch{
@@ -143,9 +141,7 @@ function processdata(){
 #------------------------------------------------------------------
 foreach ($arg in $args)
 {
-#?  Write-Host "Arg: $arg";
   if ($arg -eq "-help" -OR $arg -eq "-h" -OR $arg -eq "--help" -OR $arg -eq "help" ) {
-    #? write-output "CLI usage"
     $helpinfo = @"
 #SYNTAX
 #    .\$app -distro <string>
@@ -171,7 +167,6 @@ foreach ($arg in $args)
     exit;
   } 
   if ($arg -eq "-version" -OR $arg -eq "--version" -OR $arg -eq "version" -OR $arg -eq "-V") {
-    # write-output "$app"
     write-output "version $version"
     exit;
   }
@@ -182,9 +177,8 @@ foreach ($arg in $args)
 }
 $hdata = [string]$args[0]
 write-output $hdata
-# write-output ">"$app$version
+#? write-output ">"$app$version
 "---------------------------------------------------"
-# write-output $info
 write-output $info $distro
 "---------------------------------------------------"
 writelog(get-date)

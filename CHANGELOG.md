@@ -8,6 +8,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Released]
 
+## [0.9.0] - 2026-01-20
+### Changed
+- Keep last 7 backups
+
+## [0.8.8] - 2026-01-19
+### Changed
+- WIP: Keep last 7 backups
+
+## [0.8.7] - 2026-01-15
+### Changed
+- WIP: Keep last 7 backups
+
+## [0.8.6] - 2026-01-14
+### Changed
+- WIP: List old backups
+- Setup prune forget --keep-daily 7 --keep-weekly 5 --keep-monthly 12 --keep-yearly 75
+- Remove 'clear' from kitchensink
+
+## [0.8.5] - 2026-01-13
+### Changed
+- List old backups
+
+## [0.8.4] - 2026-01-08
+### Changed
+-  Prune old backups
+
 ## [0.8.3] - 2026-01-08
 ### Changed
 -  Merge copilot codereview (issue 9)

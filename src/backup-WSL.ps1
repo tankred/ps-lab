@@ -25,7 +25,7 @@ PARAM (
 #------------------------------------------------------------------
 # START SET
   $debug = 1
-  $version = "0.3.0"
+  $version = "0.3.1"
   $app = "backup-WSL.ps1"
   $info = "backup WSL"
   $ld = "C:\tmp\log" 
@@ -60,9 +60,9 @@ function check($distroparam) {
   # $singlelinewslrunning = $wslinfo -replace "`r?`n(?!`r?`n)", ''
   $arrwslinfo = $wslinfo.Split("`r`n")
   # check if multiple distros are spinning
-  Write-Output "Total Elements in array-->" $arrwslinfo.Count
-  # Write-Host "First element in array-->" $arrwslinfo[0]
-  # Write-Host "Second element in array-->" $arrwslinfo[2]
+  Write-Output "Total distros in array-->" $arrwslinfo.Count
+  #? Write-Host "First element in array-->" $arrwslinfo[0]
+  #? Write-Host "Second element in array-->" $arrwslinfo[2]
   if ($wslinfo -eq 'Er zijn geen actieve distributies.') { 
     "continue" 
       " Continue script " 
@@ -87,14 +87,13 @@ function check($distroparam) {
 function prunebackups() {
   Begin{
     "List backups"
-    #? $backupdir
-    $distro
-    ls $backupdir\*$distro* -name
+    #? $backupdir $distro
+    #? ls $backupdir\*$distro* -name
   }
   Process{
     Try{
       "Try remove old backups"
-      "Goal: forget --keep-daily 7 --keep-weekly 5 --keep-monthly 12 --keep-yearly 75"
+      # "Goal: forget --keep-daily 7 --keep-weekly 5 --keep-monthly 12 --keep-yearly 75"
       "For now: Keep 7"
       Get-ChildItem -Recurse -File $backupdir\*$distro* | Sort CreationTime -desc | Select -skip 7 | Remove-Item -Force
     }
@@ -114,10 +113,10 @@ function processdata(){
   Process{
     Try{
       $BACKUPDISTRO=$distro
-      # $distro
+      #? $distro
       check $distro
-      # waitforenter
-      "# backup $BACKUPDISTRO "
+      #? waitforenter
+      "# backup distro $BACKUPDISTRO "
       wsl --terminate $BACKUPDISTRO # stop distro 
       # backup distro AND will stop a distro from running
       $target = $backupdir + "\wsl-" + $BACKUPDISTRO + "-" + $year + $month + $dayn + ".tar"
@@ -131,6 +130,7 @@ function processdata(){
   }
   End{
     If($?){ # only execute if the function was successful.
+      "proccessdata OK"
       "list running distro"
       wsl --list --running
     }

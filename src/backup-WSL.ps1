@@ -25,7 +25,7 @@ PARAM (
 #------------------------------------------------------------------
 # START SET
   $debug = 1
-  $version = "0.3.1"
+  $version = "0.3.2"
   $app = "backup-WSL.ps1"
   $info = "backup WSL"
   $ld = "C:\tmp\log" 
@@ -61,14 +61,12 @@ function check($distroparam) {
   $arrwslinfo = $wslinfo.Split("`r`n")
   # check if multiple distros are spinning
   Write-Output "Total distros in array-->" $arrwslinfo.Count
-  #? Write-Host "First element in array-->" $arrwslinfo[0]
-  #? Write-Host "Second element in array-->" $arrwslinfo[2]
   if ($wslinfo -eq 'Er zijn geen actieve distributies.') { 
     "continue" 
-      " Continue script " 
+    " Continue script " 
   }
   else {
-    # $arrwslinfo[2]
+    #? $arrwslinfo[2]
       " IF $distroparam IS Running "
       "--START WSL INFO --"
       foreach ($item in $arrwslinfo) {
@@ -86,15 +84,12 @@ function check($distroparam) {
 
 function prunebackups() {
   Begin{
-    "List backups"
-    #? $backupdir $distro
-    #? ls $backupdir\*$distro* -name
+    "Prune backups"
   }
   Process{
     Try{
-      "Try remove old backups"
+      "Remove old backups (For now: keep last 7)"
       # "Goal: forget --keep-daily 7 --keep-weekly 5 --keep-monthly 12 --keep-yearly 75"
-      "For now: Keep 7"
       Get-ChildItem -Recurse -File $backupdir\*$distro* | Sort CreationTime -desc | Select -skip 7 | Remove-Item -Force
     }
     Catch{
@@ -113,7 +108,6 @@ function processdata(){
   Process{
     Try{
       $BACKUPDISTRO=$distro
-      #? $distro
       check $distro
       #? waitforenter
       "# backup distro $BACKUPDISTRO "
@@ -124,7 +118,7 @@ function processdata(){
       wsl --export $BACKUPDISTRO $target
     }
     Catch{
-      "Something went wrong."
+      "Something went wrong"
       Break
     }
   }

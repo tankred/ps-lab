@@ -25,7 +25,7 @@ PARAM (
 #------------------------------------------------------------------
 # START SET
   $debug = 1
-  $version = "0.3.2"
+  $version = "0.3.3"
   $app = "backup-WSL.ps1"
   $info = "backup WSL"
   $ld = "C:\tmp\log" 
@@ -57,13 +57,26 @@ function waitforenter {
 function check($distroparam) {
   $distroparam
   $wslinfo = wsl --list --running
+  $wslinfoall = wsl --list
   # $singlelinewslrunning = $wslinfo -replace "`r?`n(?!`r?`n)", ''
   $arrwslinfo = $wslinfo.Split("`r`n")
+  $arrwslinfoall = $wslinfoall.Split("`r`n")
   # check if multiple distros are spinning
   Write-Output "Total distros in array-->" $arrwslinfo.Count
   if ($wslinfo -eq 'Er zijn geen actieve distributies.') { 
-    "continue" 
     " Continue script " 
+    "YAH"
+    $distroparam
+    $arrwslinfoall
+    $exists = $arrwslinfall -contains $distroparam
+    $exists
+    $matched = $arrwslinfall | Select-String -Pattern $distroparam
+    Write-Host "WSL containing distro: $($matched.Line)"
+    Write-Host "distro exists in the array: $exists"
+    if (!$exists) {
+      "Distro not found ??"
+      # exit
+    }
   }
   else {
     #? $arrwslinfo[2]
@@ -77,7 +90,7 @@ function check($distroparam) {
           "sudo systemctl poweroff"
         } 
       }
-      "-- END  WSL INFO --"
+      "-- END WSL INFO --"
       waitforenter
   }
 }

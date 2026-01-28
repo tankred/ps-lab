@@ -25,7 +25,7 @@ PARAM (
 #------------------------------------------------------------------
 # START SET
   $debug = 1
-  $version = "0.3.3"
+  $version = "0.3.4"
   $app = "backup-WSL.ps1"
   $info = "backup WSL"
   $ld = "C:\tmp\log" 
@@ -55,6 +55,7 @@ function waitforenter {
 }
 
 function check($distroparam) {
+  # NEEDS rework: setup matrix: running, stopped vs known unknown
   $distroparam
   $wslinfo = wsl --list --running
   $wslinfoall = wsl --list
@@ -67,10 +68,22 @@ function check($distroparam) {
     " Continue script " 
     "YAH"
     $distroparam
+      "--START WSL INFO --"
+      foreach ($item in $arrwslinfo) {
+        $item
+      }
+      "-- END WSL INFO --"
+
+      "--START WSL INFO ALL --"
+      foreach ($item in $arrwslinfo) {
+        $item
+      }
+      "-- END WSL INFO ALL --"
+
     $arrwslinfoall
-    $exists = $arrwslinfall -contains $distroparam
+    $exists = $arrwslinfoall -contains $distroparam
     $exists
-    $matched = $arrwslinfall | Select-String -Pattern $distroparam
+    $matched = $arrwslinfoall | Select-String -Pattern $distroparam
     Write-Host "WSL containing distro: $($matched.Line)"
     Write-Host "distro exists in the array: $exists"
     if (!$exists) {

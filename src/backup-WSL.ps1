@@ -25,7 +25,7 @@ PARAM (
 #------------------------------------------------------------------
 # START SET
   $debug = 1
-  $version = "0.3.4"
+  $version = "0.3.5"
   $app = "backup-WSL.ps1"
   $info = "backup WSL"
   $ld = "C:\tmp\log" 
@@ -57,55 +57,86 @@ function waitforenter {
 function check($distroparam) {
   # NEEDS rework: setup matrix: running, stopped vs known unknown
   $distroparam
-  $wslinfo = wsl --list --running
-  $wslinfoall = wsl --list
+  $wsllist = wsl --list
+  $wsllistrunning = wsl --list --running
   # $singlelinewslrunning = $wslinfo -replace "`r?`n(?!`r?`n)", ''
-  $arrwslinfo = $wslinfo.Split("`r`n")
-  $arrwslinfoall = $wslinfoall.Split("`r`n")
+  $arrwsllist = $wsllist.Split("`r`n")
+  $exists = $arrwsllist -contains $distroparam
+  "distro in wsl list $exists"
+  $matched = $arrwsllist | Select-String -Pattern $distroparam
+  Write-Host "WSL containing distro: $($matched.Line)"
+  $regexdistro = $distroparam+'*'
+  $match = $arrwsllist -contains $regexdistro
+  if(@($arrwsllist) -like $distroparam){
+    "# at least 1 string in arr starts with distro"
+  } else {
+    "not found"
+  }
+  "-----------M"
+  $regexdistro
+  $match
+  $Serv = $arrwsllist | Where-Object { $_ -match "Fedora*" }
+  $Serv
+  "-----------M"
+  $distroparam
+  foreach ($item in $arrwsllist) {
+    $item
+    if ($item -match $distroparam) {
+       Write-Host "match found: $item"
+    }  
+    if ($item -like "FedoraLinux") {
+       Write-Host "LIKE match found: $item"
+    }  
+    if ($item -eq "FedoraLinux-42 (Standaard)") {
+       Write-Host "Full match found: $item"
+    } 
+  }
+  $arrwsllistrunning = $wsllistrunning.Split("`r`n")
   # check if multiple distros are spinning
-  Write-Output "Total distros in array-->" $arrwslinfo.Count
-  if ($wslinfo -eq 'Er zijn geen actieve distributies.') { 
-    " Continue script " 
-    "YAH"
-    $distroparam
-      "--START WSL INFO --"
-      foreach ($item in $arrwslinfo) {
-        $item
-      }
-      "-- END WSL INFO --"
-
-      "--START WSL INFO ALL --"
-      foreach ($item in $arrwslinfo) {
-        $item
-      }
-      "-- END WSL INFO ALL --"
-
-    $arrwslinfoall
-    $exists = $arrwslinfoall -contains $distroparam
-    $exists
-    $matched = $arrwslinfoall | Select-String -Pattern $distroparam
-    Write-Host "WSL containing distro: $($matched.Line)"
-    Write-Host "distro exists in the array: $exists"
-    if (!$exists) {
-      "Distro not found ??"
-      # exit
-    }
-  }
-  else {
-    #? $arrwslinfo[2]
-      " IF $distroparam IS Running "
-      "--START WSL INFO --"
-      foreach ($item in $arrwslinfo) {
-        $item
-        if ($item -contains $distroparam) {
-          " HALT script "
-          " Send poweroff to running distro "
-          "sudo systemctl poweroff"
-        } 
-      }
-      "-- END WSL INFO --"
-      waitforenter
-  }
+  Write-Output "Total distros in array-->" $arrwslist.Count
+  Write-Output "Total running distros in array-->" $arrwsllistrunning.Count
+  #   if ($wslinfo -eq 'Er zijn geen actieve distributies.') { 
+  #     " Continue script " 
+  #     "YAH"
+  #     $distroparam
+  #       "--START WSL INFO --"
+  #       foreach ($item in $arrwslinfo) {
+  #         $item
+  #       }
+  #       "-- END WSL INFO --"
+  # 
+  #       "--START WSL INFO ALL --"
+  #       foreach ($item in $arrwslinfo) {
+  #         $item
+  #       }
+  #       "-- END WSL INFO ALL --"
+  # 
+  #     $arrwslinfoall
+  #     $exists = $arrwslinfoall -contains $distroparam
+  #     $exists
+  #     $matched = $arrwslinfoall | Select-String -Pattern $distroparam
+  #     Write-Host "WSL containing distro: $($matched.Line)"
+  #     Write-Host "distro exists in the array: $exists"
+  #     if (!$exists) {
+  #       "Distro not found ??"
+  #       # exit
+  #     }
+  #   }
+  #   else {
+  #     #? $arrwslinfo[2]
+  #       " IF $distroparam IS Running "
+  #       "--START WSL INFO --"
+  #       foreach ($item in $arrwslinfo) {
+  #         $item
+  #         if ($item -contains $distroparam) {
+  #           " HALT script "
+  #           " Send poweroff to running distro "
+  #           "sudo systemctl poweroff"
+  #         } 
+  #       }
+  #       "-- END WSL INFO --"
+  #       waitforenter
+  #   }
 }
 
 function prunebackups() {
@@ -130,12 +161,11 @@ function processdata(){
   Begin{
     $distro
     wsl -l -v # show installed distro(s)"
+    check $distro
   }
   Process{
     Try{
       $BACKUPDISTRO=$distro
-      check $distro
-      #? waitforenter
       "# backup distro $BACKUPDISTRO "
       wsl --terminate $BACKUPDISTRO # stop distro 
       # backup distro AND will stop a distro from running

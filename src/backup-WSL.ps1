@@ -25,7 +25,7 @@ PARAM (
 #------------------------------------------------------------------
 # START SET
   $debug = 1
-  $version = "0.3.5"
+  $version = "0.3.6"
   $app = "backup-WSL.ps1"
   $info = "backup WSL"
   $ld = "C:\tmp\log" 
@@ -56,41 +56,26 @@ function waitforenter {
 
 function check($distroparam) {
   # NEEDS rework: setup matrix: running, stopped vs known unknown
-  $distroparam
   $wsllist = wsl --list
-  $wsllistrunning = wsl --list --running
-  # $singlelinewslrunning = $wslinfo -replace "`r?`n(?!`r?`n)", ''
   $arrwsllist = $wsllist.Split("`r`n")
-  $exists = $arrwsllist -contains $distroparam
-  "distro in wsl list $exists"
-  $matched = $arrwsllist | Select-String -Pattern $distroparam
-  Write-Host "WSL containing distro: $($matched.Line)"
-  $regexdistro = $distroparam+'*'
-  $match = $arrwsllist -contains $regexdistro
-  if(@($arrwsllist) -like $distroparam){
-    "# at least 1 string in arr starts with distro"
-  } else {
-    "not found"
-  }
-  "-----------M"
+  $regexdistro = $distroparam+' (Standaard)'
+  "-----------M-"
   $regexdistro
-  $match
-  $Serv = $arrwsllist | Where-Object { $_ -match "Fedora*" }
-  $Serv
-  "-----------M"
-  $distroparam
+  "-----------M-"
   foreach ($item in $arrwsllist) {
-    $item
-    if ($item -match $distroparam) {
-       Write-Host "match found: $item"
+    # $item
+    if ($item -match $regexdistro) {
+       Write-Host "MATCH found: $item"
     }  
-    if ($item -like "FedoraLinux") {
-       Write-Host "LIKE match found: $item"
+    if ($item -like $regexdistro) {
+       Write-Host "LIKE found: $item"
     }  
-    if ($item -eq "FedoraLinux-42 (Standaard)") {
+    if ($item -eq $regexdistro) {
        Write-Host "Full match found: $item"
     } 
   }
+  # exit
+  $wsllistrunning = wsl --list --running
   $arrwsllistrunning = $wsllistrunning.Split("`r`n")
   # check if multiple distros are spinning
   Write-Output "Total distros in array-->" $arrwslist.Count
@@ -159,8 +144,8 @@ function prunebackups() {
 function processdata(){
   Param()
   Begin{
-    $distro
-    wsl -l -v # show installed distro(s)"
+    # $distro
+    # wsl -l -v # show installed distro(s)"
     check $distro
   }
   Process{

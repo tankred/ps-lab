@@ -25,7 +25,7 @@ PARAM (
 #------------------------------------------------------------------
 # START SET
   $debug = 1
-  $version = "0.3.6"
+  $version = "0.3.7"
   $app = "backup-WSL.ps1"
   $info = "backup WSL"
   $ld = "C:\tmp\log" 
@@ -58,7 +58,9 @@ function check($distroparam) {
   # NEEDS rework: setup matrix: running, stopped vs known unknown
   $wsllist = wsl --list
   $arrwsllist = $wsllist.Split("`r`n")
-  $regexdistro = $distroparam+' (Standaard)'
+  Write-Output "Total distros in array-->" $arrwsllist.Count
+  # $regexdistro = $distroparam+' (Standaard)'
+  $regexdistro = $distroparam
   "-----------M-"
   $regexdistro
   "-----------M-"
@@ -78,7 +80,6 @@ function check($distroparam) {
   $wsllistrunning = wsl --list --running
   $arrwsllistrunning = $wsllistrunning.Split("`r`n")
   # check if multiple distros are spinning
-  Write-Output "Total distros in array-->" $arrwslist.Count
   Write-Output "Total running distros in array-->" $arrwsllistrunning.Count
   #   if ($wslinfo -eq 'Er zijn geen actieve distributies.') { 
   #     " Continue script " 

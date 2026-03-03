@@ -1,4 +1,4 @@
-#----------------------------------------------------------------------------
+#---------------------------------------------------------------------------
 # PowerShell 7.5.4 
 # by Kurt Duyck (kurt.duyck@vives.be)
 #
@@ -25,7 +25,7 @@ PARAM (
 #------------------------------------------------------------------
 # START SET
   $debug = 1
-  $version = "0.3.0"
+  $version = "0.3.8"
   $app = "backup-WSL.ps1"
   $info = "backup WSL"
   $ld = "C:\tmp\log" 
@@ -55,47 +55,84 @@ function waitforenter {
 }
 
 function check($distroparam) {
-  $distroparam
-  $wslinfo = wsl --list --running
-  # $singlelinewslrunning = $wslinfo -replace "`r?`n(?!`r?`n)", ''
-  $arrwslinfo = $wslinfo.Split("`r`n")
+  # NEEDS rework: setup matrix: running, stopped vs known unknown
+  $wsllist = wsl --list
+  $arrwsllist = $wsllist.Split("`r`n")
+  Write-Output "Total distros in array-->" $arrwsllist.Count
+  # $regexdistro = $distroparam+' (Standaard)'
+  $regexdistro = $distroparam
+  "-----------M-"
+  $regexdistro
+  "-----------M-"
+  foreach ($item in $arrwsllist) {
+    # $item
+    if ($item -match $regexdistro) {
+       Write-Host "MATCH found: $item"
+    }  
+    if ($item -like $regexdistro) {
+       Write-Host "LIKE found: $item"
+    }  
+    if ($item -eq $regexdistro) {
+       Write-Host "Full match found: $item"
+    } 
+  }
+  # exit
+  $wsllistrunning = wsl --list --running
+  $arrwsllistrunning = $wsllistrunning.Split("`r`n")
   # check if multiple distros are spinning
-  Write-Output "Total Elements in array-->" $arrwslinfo.Count
-  # Write-Host "First element in array-->" $arrwslinfo[0]
-  # Write-Host "Second element in array-->" $arrwslinfo[2]
-  if ($wslinfo -eq 'Er zijn geen actieve distributies.') { 
-    "continue" 
-      " Continue script " 
-  }
-  else {
-    # $arrwslinfo[2]
-      " IF $distroparam IS Running "
-      "--START WSL INFO --"
-      foreach ($item in $arrwslinfo) {
-        $item
-        if ($item -contains $distroparam) {
-          " HALT script "
-          " Send poweroff to running distro "
-          "sudo systemctl poweroff"
-        } 
-      }
-      "-- END  WSL INFO --"
-      waitforenter
-  }
+  Write-Output "Total running distros in array-->" $arrwsllistrunning.Count
+  #   if ($wslinfo -eq 'Er zijn geen actieve distributies.') { 
+  #     " Continue script " 
+  #     "YAH"
+  #     $distroparam
+  #       "--START WSL INFO --"
+  #       foreach ($item in $arrwslinfo) {
+  #         $item
+  #       }
+  #       "-- END WSL INFO --"
+  # 
+  #       "--START WSL INFO ALL --"
+  #       foreach ($item in $arrwslinfo) {
+  #         $item
+  #       }
+  #       "-- END WSL INFO ALL --"
+  # 
+  #     $arrwslinfoall
+  #     $exists = $arrwslinfoall -contains $distroparam
+  #     $exists
+  #     $matched = $arrwslinfoall | Select-String -Pattern $distroparam
+  #     Write-Host "WSL containing distro: $($matched.Line)"
+  #     Write-Host "distro exists in the array: $exists"
+  #     if (!$exists) {
+  #       "Distro not found ??"
+  #       # exit
+  #     }
+  #   }
+  #   else {
+  #     #? $arrwslinfo[2]
+  #       " IF $distroparam IS Running "
+  #       "--START WSL INFO --"
+  #       foreach ($item in $arrwslinfo) {
+  #         $item
+  #         if ($item -contains $distroparam) {
+  #           " HALT script "
+  #           " Send poweroff to running distro "
+  #           "sudo systemctl poweroff"
+  #         } 
+  #       }
+  #       "-- END WSL INFO --"
+  #       waitforenter
+  #   }
 }
 
 function prunebackups() {
   Begin{
-    "List backups"
-    #? $backupdir
-    $distro
-    ls $backupdir\*$distro* -name
+    "Prune backups"
   }
   Process{
     Try{
-      "Try remove old backups"
-      "Goal: forget --keep-daily 7 --keep-weekly 5 --keep-monthly 12 --keep-yearly 75"
-      "For now: Keep 7"
+      "Remove old backups (For now: keep last 7)"
+      # "Goal: forget --keep-daily 7 --keep-weekly 5 --keep-monthly 12 --keep-yearly 75"
       Get-ChildItem -Recurse -File $backupdir\*$distro* | Sort CreationTime -desc | Select -skip 7 | Remove-Item -Force
     }
     Catch{
@@ -108,16 +145,14 @@ function prunebackups() {
 function processdata(){
   Param()
   Begin{
-    $distro
-    wsl -l -v # show installed distro(s)"
+    # $distro
+    # wsl -l -v # show installed distro(s)"
+    check $distro
   }
   Process{
     Try{
       $BACKUPDISTRO=$distro
-      # $distro
-      check $distro
-      # waitforenter
-      "# backup $BACKUPDISTRO "
+      "# backup distro $BACKUPDISTRO "
       wsl --terminate $BACKUPDISTRO # stop distro 
       # backup distro AND will stop a distro from running
       $target = $backupdir + "\wsl-" + $BACKUPDISTRO + "-" + $year + $month + $dayn + ".tar"
@@ -125,12 +160,13 @@ function processdata(){
       wsl --export $BACKUPDISTRO $target
     }
     Catch{
-      "Something went wrong."
+      "Something went wrong"
       Break
     }
   }
   End{
     If($?){ # only execute if the function was successful.
+      "proccessdata OK"
       "list running distro"
       wsl --list --running
     }

@@ -8,6 +8,42 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Released]
 
+## [1.0.0] - 2026-03-03
+### Changed
+- Merge backup distro
+
+## [0.9.8] - 2026-02-12
+### Changed
+- WIP: Exit when distro is unknown
+
+## [0.9.7] - 2026-02-02
+### Changed
+- WIP: Exit when distro is unknown
+
+## [0.9.6] - 2026-01-30
+### Changed
+- WIP: Exit when distro is unknown
+
+## [0.9.5] - 2026-01-29
+### Changed
+- WIP: Exit when distro is unknown
+
+## [0.9.4] - 2026-01-28
+### Changed
+- WIP: Exit when distro is unknown
+
+## [0.9.3] - 2026-01-27
+### Changed
+- WIP: Exit when distro is unknown
+
+## [0.9.2] - 2026-01-26
+### Changed
+- Exit when distro is unknown
+
+## [0.9.1] - 2026-01-23
+### Changed
+- Remove list backups
+
 ## [0.9.0] - 2026-01-20
 ### Changed
 - Keep last 7 backups

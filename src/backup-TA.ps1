@@ -18,19 +18,19 @@
 #Param
 #------------------------------------------------------------------
 PARAM ( 
-    [string]$distro = "FedoraLinux-42"
 )
 #------------------------------------------------------------------
 #Ini
 #------------------------------------------------------------------
 # START SET
   $debug = 1
-  $version = "0.1.0"
+  $version = "0.1.1"
   $app = "backup-TA.ps1"
   $info = "backup TA"
   $ld = "C:\tmp\log" 
   if (!(Test-Path $ld)) { New-Item -ItemType Directory -Path $ld -Force }
-  $backupdir = "C:\office\mirror\WSL-Fedora"
+  $srcdir = "g:\Mijn Drive\Team-August\"
+  $backupdir = "g:\.shortcut-targets-by-id\1DrNK512NxdJpe9m78nXETQv2OrIgAou9\Backup-Team-August\"
 # END SET
 $month = "00"+(get-date).month
 $month = $month.substring($month.length - 2 , 2)
@@ -54,93 +54,6 @@ function waitforenter {
     $null = Read-Host
 }
 
-function check($distroparam) {
-  # NEEDS rework: setup matrix: running, stopped vs known unknown
-  $wsllist = wsl --list
-  $arrwsllist = $wsllist.Split("`r`n")
-  Write-Output "Total distros in array-->" $arrwsllist.Count
-  # $regexdistro = $distroparam+' (Standaard)'
-  $regexdistro = $distroparam
-  "-----------M-"
-  $regexdistro
-  "-----------M-"
-  foreach ($item in $arrwsllist) {
-    # $item
-    if ($item -match $regexdistro) {
-       Write-Host "MATCH found: $item"
-    }  
-    if ($item -like $regexdistro) {
-       Write-Host "LIKE found: $item"
-    }  
-    if ($item -eq $regexdistro) {
-       Write-Host "Full match found: $item"
-    } 
-  }
-  # exit
-  $wsllistrunning = wsl --list --running
-  $arrwsllistrunning = $wsllistrunning.Split("`r`n")
-  # check if multiple distros are spinning
-  Write-Output "Total running distros in array-->" $arrwsllistrunning.Count
-  #   if ($wslinfo -eq 'Er zijn geen actieve distributies.') { 
-  #     " Continue script " 
-  #     "YAH"
-  #     $distroparam
-  #       "--START WSL INFO --"
-  #       foreach ($item in $arrwslinfo) {
-  #         $item
-  #       }
-  #       "-- END WSL INFO --"
-  # 
-  #       "--START WSL INFO ALL --"
-  #       foreach ($item in $arrwslinfo) {
-  #         $item
-  #       }
-  #       "-- END WSL INFO ALL --"
-  # 
-  #     $arrwslinfoall
-  #     $exists = $arrwslinfoall -contains $distroparam
-  #     $exists
-  #     $matched = $arrwslinfoall | Select-String -Pattern $distroparam
-  #     Write-Host "WSL containing distro: $($matched.Line)"
-  #     Write-Host "distro exists in the array: $exists"
-  #     if (!$exists) {
-  #       "Distro not found ??"
-  #       # exit
-  #     }
-  #   }
-  #   else {
-  #     #? $arrwslinfo[2]
-  #       " IF $distroparam IS Running "
-  #       "--START WSL INFO --"
-  #       foreach ($item in $arrwslinfo) {
-  #         $item
-  #         if ($item -contains $distroparam) {
-  #           " HALT script "
-  #           " Send poweroff to running distro "
-  #           "sudo systemctl poweroff"
-  #         } 
-  #       }
-  #       "-- END WSL INFO --"
-  #       waitforenter
-  #   }
-}
-
-function prunebackups() {
-  Begin{
-    "Prune backups"
-  }
-  Process{
-    Try{
-      "Remove old backups (For now: keep last 7)"
-      # "Goal: forget --keep-daily 7 --keep-weekly 5 --keep-monthly 12 --keep-yearly 75"
-      Get-ChildItem -Recurse -File $backupdir\*$distro* | Sort CreationTime -desc | Select -skip 7 | Remove-Item -Force
-    }
-    Catch{
-      "Something went wrong."
-      Break
-    }
-  }
-}
 
 function processdata(){
   Param()
@@ -149,7 +62,15 @@ function processdata(){
   }
   Process{
     Try{
+      "TRY list target dir ! "
       "Try backup"
+      # WIP cp $srcdir $backupdir
+      # Copy-Item -Path $srcdir -Destination $backkupdir -Recurse
+      # With overwrite
+      # Skip desktop.ini files
+      # Download gdoc files and convert to docx
+      # Explore ggl drive cmdlets https://www.go2share.net/article/google-drive-cmdlets
+      # Keep long names
     }
     Catch{
       "Something went wrong"
@@ -158,7 +79,7 @@ function processdata(){
   }
   End{
     If($?){ # only execute if the function was successful.
-      "proccessdata OK"
+      "Full backup created"
     }
   }
 }
@@ -198,16 +119,11 @@ foreach ($arg in $args)
 }
 $hdata = [string]$args[0]
 write-output $hdata
-#? write-output ">"$app$version
-"---------------------------------------------------"
-write-output $info $distro
 "---------------------------------------------------"
 writelog(get-date)
 writelog($app+$version)
 #####################################################
 processdata;
-# prunebackups;
 #####################################################
 writelog("--------------------------------------")	
-#? "EOF"
 

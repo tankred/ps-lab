@@ -24,7 +24,7 @@ PARAM (
 #------------------------------------------------------------------
 # START SET
   $debug = 1
-  $version = "0.1.1"
+  $version = "0.1.2"
   $app = "backup-TA.ps1"
   $info = "backup TA"
   $ld = "C:\tmp\log" 
@@ -41,9 +41,6 @@ $log = $ld + "pslog_"+$year+$month+$dayn+".txt"
 #------------------------------------------------------------------
 ## Functions
 #------------------------------------------------------------------
-# function writelog($e){
-# 	Add-Content $log $e""
-# }
 function writelog { param([string]$Message) try { Add-Content -Path $log -Value $Message } catch { Write-Warning "Kon niet naar logbestand schrijven: $_" } }
 
 function waitforenter {
@@ -54,7 +51,6 @@ function waitforenter {
     $null = Read-Host
 }
 
-
 function processdata(){
   Param()
   Begin{
@@ -64,6 +60,8 @@ function processdata(){
     Try{
       "TRY list target dir ! "
       "Try backup"
+      $backupdir
+      # cp c:\tmp\nodata\upload-nodata.zip $backupdir [OK]
       # WIP cp $srcdir $backupdir
       # Copy-Item -Path $srcdir -Destination $backkupdir -Recurse
       # With overwrite

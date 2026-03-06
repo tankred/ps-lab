@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.4] - 2026-03-06
+### Changed
+- Backup team A 
+
 ## [1.0.3] - 2026-03-05
 ### Changed
 - Backup team A, test write to linked ggl dir

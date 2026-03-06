@@ -24,7 +24,7 @@ PARAM (
 #------------------------------------------------------------------
 # START SET
   $debug = 1
-  $version = "0.1.2"
+  $version = "0.1.3"
   $app = "backup-TA.ps1"
   $info = "backup TA"
   $ld = "C:\tmp\log" 
@@ -61,7 +61,13 @@ function processdata(){
       "TRY list target dir ! "
       "Try backup"
       $backupdir
+      $srcdir
       # cp c:\tmp\nodata\upload-nodata.zip $backupdir [OK]
+      $target = $backupdir + "Backup-Inhoudstafel.docx"
+      $target
+      cp "g:\Mijn Drive\Team-August\Backup-Inhoudstafel.docx" $target -Force # [OK]
+      # cp "g:\Mijn Drive\Team-August\Backup-Inhoudstafel.docx" $backupdir -Force # [NOK]
+      # Copy-Item -Path "C:\Source\Folder" -Destination "C:\Destination\Folder" -Recurse -Force
       # WIP cp $srcdir $backupdir
       # Copy-Item -Path $srcdir -Destination $backkupdir -Recurse
       # With overwrite
@@ -72,6 +78,7 @@ function processdata(){
     }
     Catch{
       "Something went wrong"
+      Write-Warning $Error[0]
       Break
     }
   }

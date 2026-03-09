@@ -1,4 +1,4 @@
-#---------------------------------------------------------------------------
+#--------------------------------------------------------------------------
 # PowerShell 7.5.4 
 # by Kurt Duyck (kurt.duyck@vives.be)
 #
@@ -24,13 +24,13 @@ PARAM (
 #------------------------------------------------------------------
 # START SET
   $debug = 1
-  $version = "0.1.3"
+  $version = "0.1.4"
   $app = "backup-TA.ps1"
   $info = "backup TA"
   $ld = "C:\tmp\log" 
   if (!(Test-Path $ld)) { New-Item -ItemType Directory -Path $ld -Force }
-  $srcdir = "g:\Mijn Drive\Team-August\"
-  $backupdir = "g:\.shortcut-targets-by-id\1DrNK512NxdJpe9m78nXETQv2OrIgAou9\Backup-Team-August\"
+  $srcdir = "g:\Mijn Drive\Team-August"
+  $backupdir = "g:\.shortcut-targets-by-id\1DrNK512NxdJpe9m78nXETQv2OrIgAou9\Backup-Team-August"
 # END SET
 $month = "00"+(get-date).month
 $month = $month.substring($month.length - 2 , 2)
@@ -63,11 +63,13 @@ function processdata(){
       $backupdir
       $srcdir
       # cp c:\tmp\nodata\upload-nodata.zip $backupdir [OK]
-      $target = $backupdir + "Backup-Inhoudstafel.docx"
-      $target
-      cp "g:\Mijn Drive\Team-August\Backup-Inhoudstafel.docx" $target -Force # [OK]
+      #     $target = $backupdir + "Backup-Inhoudstafel.docx"
+      # $target
+      # cp "g:\Mijn Drive\Team-August\Backup-Inhoudstafel.docx" $target -Force # [OK]
       # cp "g:\Mijn Drive\Team-August\Backup-Inhoudstafel.docx" $backupdir -Force # [NOK]
-      # Copy-Item -Path "C:\Source\Folder" -Destination "C:\Destination\Folder" -Recurse -Force
+      # Copy-Item -Path "C:\Source\Folder" -Destination "C:\Destination\Folder" -Recurse -Force -Exclude "*.tmp"
+      Copy-Item -Path $srcdir -Destination $backupdir -Recurse -Force -Exclude "*.gdoc", "*.ini"
+      
       # WIP cp $srcdir $backupdir
       # Copy-Item -Path $srcdir -Destination $backkupdir -Recurse
       # With overwrite

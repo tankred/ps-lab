@@ -24,7 +24,7 @@ PARAM (
 #------------------------------------------------------------------
 # START SET
   $debug = 1
-  $version = "0.1.4"
+  $version = "0.1.5"
   $app = "backup-TA.ps1"
   $info = "backup TA"
   $ld = "C:\tmp\log" 
@@ -51,6 +51,13 @@ function waitforenter {
     $null = Read-Host
 }
 
+function processgdoc(){
+  # add recurse
+  Get-ChildItem -Path $srcdir -Filter "*.gdoc" -File
+      # Download gdoc files and convert to docx
+      # Explore ggl drive cmdlets https://www.go2share.net/article/google-drive-cmdlets
+}
+
 function processdata(){
   Param()
   Begin{
@@ -58,25 +65,11 @@ function processdata(){
   }
   Process{
     Try{
-      "TRY list target dir ! "
-      "Try backup"
-      $backupdir
-      $srcdir
-      # cp c:\tmp\nodata\upload-nodata.zip $backupdir [OK]
-      #     $target = $backupdir + "Backup-Inhoudstafel.docx"
-      # $target
-      # cp "g:\Mijn Drive\Team-August\Backup-Inhoudstafel.docx" $target -Force # [OK]
-      # cp "g:\Mijn Drive\Team-August\Backup-Inhoudstafel.docx" $backupdir -Force # [NOK]
-      # Copy-Item -Path "C:\Source\Folder" -Destination "C:\Destination\Folder" -Recurse -Force -Exclude "*.tmp"
+      "... backup"
+      # $backupdir
+      # $srcdir
       Copy-Item -Path $srcdir -Destination $backupdir -Recurse -Force -Exclude "*.gdoc", "*.ini"
       
-      # WIP cp $srcdir $backupdir
-      # Copy-Item -Path $srcdir -Destination $backkupdir -Recurse
-      # With overwrite
-      # Skip desktop.ini files
-      # Download gdoc files and convert to docx
-      # Explore ggl drive cmdlets https://www.go2share.net/article/google-drive-cmdlets
-      # Keep long names
     }
     Catch{
       "Something went wrong"
@@ -101,14 +94,8 @@ foreach ($arg in $args)
 #    .\$app
 #
 #OPTIONAL PARAMETERS
-#       -h
-#       help
-#    	-help
-#    	--help
-#       -V
-#       version
-#       -version
-#       --version
+#       -h, help, -help, --help
+#       -V, version, -version, --version
 #
 #SAMPLE
 #PS > .\$app -h
@@ -131,6 +118,8 @@ writelog(get-date)
 writelog($app+$version)
 #####################################################
 processdata;
+processgdoc;
+      # Keep long names
 #####################################################
 writelog("--------------------------------------")	
 

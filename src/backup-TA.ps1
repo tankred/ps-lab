@@ -24,7 +24,7 @@ PARAM (
 #------------------------------------------------------------------
 # START SET
   $debug = 1
-  $version = "0.1.5"
+  $version = "0.1.6"
   $app = "backup-TA.ps1"
   $info = "backup TA"
   $ld = "C:\tmp\log" 
@@ -53,7 +53,7 @@ function waitforenter {
 
 function processgdoc(){
   # add recurse
-  Get-ChildItem -Path $srcdir -Filter "*.gdoc" -File
+  Get-ChildItem -Path $srcdir -Recurse -Filter "*.gdoc" -File
       # Download gdoc files and convert to docx
       # Explore ggl drive cmdlets https://www.go2share.net/article/google-drive-cmdlets
 }
@@ -68,7 +68,7 @@ function processdata(){
       "... backup"
       # $backupdir
       # $srcdir
-      Copy-Item -Path $srcdir -Destination $backupdir -Recurse -Force -Exclude "*.gdoc", "*.ini"
+      Copy-Item -Path $srcdir -Destination $backupdir -Recurse -Force -Exclude "*.gdoc", "*.ini" -errorAction stop
       
     }
     Catch{

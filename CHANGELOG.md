@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.8] - 2026-03-12
+### Changed
+- Gen password (W11) 
+
 ## [1.0.7] - 2026-03-12
 ### Changed
 - Backup team A: list gdoc files 

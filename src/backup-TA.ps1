@@ -24,7 +24,7 @@ PARAM (
 #------------------------------------------------------------------
 # START SET
   $debug = 1
-  $version = "0.1.6"
+  $version = "0.1.7"
   $app = "backup-TA.ps1"
   $info = "backup TA"
   $ld = "C:\tmp\log" 
@@ -62,6 +62,9 @@ function processdata(){
   Param()
   Begin{
     "check GGL drive"
+    "List files newer than specific date"
+    Get-ChildItem -Path $srcdir -Recurse | Where-Object { $_.LastWriteTime -ge "03/22/2026" } | select-object Name
+    exit
   }
   Process{
     Try{

@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.10] - 2026-03-30
+### Changed
+- WIP: Backup TA (last checked date 03/30/2026)
+
 ## [1.0.9] - 2026-03-27
 ### Changed
 - WIP: Backup TA (last checked date 03/27/2026)

@@ -18,13 +18,14 @@
 #Param
 #------------------------------------------------------------------
 PARAM ( 
+    [string]$datelastchecked
 )
 #------------------------------------------------------------------
 #Ini
 #------------------------------------------------------------------
 # START SET
   $debug = 1
-  $version = "0.1.7"
+  $version = "0.2.0"
   $app = "backup-TA.ps1"
   $info = "backup TA"
   $ld = "C:\tmp\log" 
@@ -59,11 +60,17 @@ function processgdoc(){
 }
 
 function processdata(){
-  Param()
+  Param(
+    [Parameter(Mandatory)][string]$datelastchecked
+    # [string]$datelastchecked
+  )
   Begin{
     "check GGL drive"
     "List files newer than specific date"
-    Get-ChildItem -Path $srcdir -Recurse | Where-Object { $_.LastWriteTime -ge "03/22/2026" } | select-object Name
+    $newfile = (Get-ChildItem -Path $srcdir -Recurse | Where-Object { $_.LastWriteTime -ge $datelastchecked } | select-object FullName)
+    $newfile.length
+    $newfile.GetType().Name
+    $newfile #.Substring(12)
     exit
   }
   Process{
@@ -94,7 +101,7 @@ foreach ($arg in $args)
   if ($arg -eq "-help" -OR $arg -eq "-h" -OR $arg -eq "--help" -OR $arg -eq "help" ) {
     $helpinfo = @"
 #SYNTAX
-#    .\$app
+#    .\$app -datelastchecked 'MM/dd/YYYY'
 #
 #OPTIONAL PARAMETERS
 #       -h, help, -help, --help

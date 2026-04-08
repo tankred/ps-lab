@@ -18,14 +18,14 @@
 #Param
 #------------------------------------------------------------------
 PARAM ( 
-    [string]$datelastchecked
+   # [string]$datelastchecked
 )
 #------------------------------------------------------------------
 #Ini
 #------------------------------------------------------------------
 # START SET
   $debug = 1
-  $version = "0.2.0"
+  $version = "0.2.1"
   $app = "backup-TA.ps1"
   $info = "backup TA"
   $ld = "C:\tmp\log" 
@@ -67,10 +67,14 @@ function processdata(){
   Begin{
     "check GGL drive"
     "List files newer than specific date"
-    $newfile = (Get-ChildItem -Path $srcdir -Recurse | Where-Object { $_.LastWriteTime -ge $datelastchecked } | select-object FullName)
+    $newfile = (Get-ChildItem -Path $srcdir -Recurse | Where-Object { $_.LastWriteTime -ge $datelastchecked } | select-object FullName, LastWriteTime, Name)
     $newfile.length
     $newfile.GetType().Name
-    $newfile #.Substring(12)
+    #$newfile -replace 'G:\Mijn Drive\Team-August', 'ggl' # contains only Fullname
+    $newfile.LastWriteTime
+    $newfile.FullName
+    $newfile.Name
+    
     exit
   }
   Process{

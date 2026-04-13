@@ -1,4 +1,4 @@
-#---------------------------------------------------------------------------
+#--------------------------------------------------------------------------
 # PowerShell 7.5.4 
 # by Kurt Duyck (kurt.duyck@vives.be)
 #
@@ -25,7 +25,7 @@ PARAM (
 #------------------------------------------------------------------
 # START SET
   $debug = 1
-  $version = "0.3.8"
+  $version = "0.3.9"
   $app = "backup-WSL.ps1"
   $info = "backup WSL"
   $ld = "C:\tmp\log" 
@@ -58,6 +58,7 @@ function check($distroparam) {
   # NEEDS rework: setup matrix: running, stopped vs known unknown
   $wsllist = wsl --list
   $arrwsllist = $wsllist.Split("`r`n")
+  # drop the empty lines ! 
   Write-Output "Total distros in array-->" $arrwsllist.Count
   # $regexdistro = $distroparam+' (Standaard)'
   $regexdistro = $distroparam
@@ -65,18 +66,21 @@ function check($distroparam) {
   $regexdistro
   "-----------M-"
   foreach ($item in $arrwsllist) {
-    # $item
-    if ($item -match $regexdistro) {
+    $item
+    if ($regexdistro -match $item) {
        Write-Host "MATCH found: $item"
     }  
-    if ($item -like $regexdistro) {
+    if ($regexdistro -like $item) {
        Write-Host "LIKE found: $item"
     }  
-    if ($item -eq $regexdistro) {
+    if ($regexdistro -eq $item) {
        Write-Host "Full match found: $item"
     } 
+    if ($regexdistro -ne $item) {
+       Write-Host "no match found: $item - $regexdistro"
+    }
   }
-  # exit
+  exit
   $wsllistrunning = wsl --list --running
   $arrwsllistrunning = $wsllistrunning.Split("`r`n")
   # check if multiple distros are spinning
@@ -183,15 +187,8 @@ foreach ($arg in $args)
 #    .\$app -distro <string>
 #
 #OPTIONAL PARAMETERS
-#       -h
-#       help
-#    	-help
-#    	--help
-#       -V
-#       version
-#       -version
-#       --version
-#
+#       -h, help, -help, --help
+#       -V, version, -version, --version
 #SAMPLE
 #PS > .\$app -h
 #PS > .\$app -V

@@ -25,7 +25,7 @@ PARAM (
 #------------------------------------------------------------------
 # START SET
   $debug = 1
-  $version = "0.2.1"
+  $version = "0.2.2"
   $app = "backup-TA.ps1"
   $info = "backup TA"
   $ld = "C:\tmp\log" 
@@ -65,16 +65,20 @@ function processdata(){
     # [string]$datelastchecked
   )
   Begin{
+    # todo: Stop on invalid dateformat Error: "Cannot convert value "047/08/2026" to type "System.DateTime"
     "check GGL drive"
     "List files newer than specific date"
     $newfile = (Get-ChildItem -Path $srcdir -Recurse | Where-Object { $_.LastWriteTime -ge $datelastchecked } | select-object FullName, LastWriteTime, Name)
     $newfile.length
+    if ($newfile.length -gt 0) { 
     $newfile.GetType().Name
     #$newfile -replace 'G:\Mijn Drive\Team-August', 'ggl' # contains only Fullname
     $newfile.LastWriteTime
     $newfile.FullName
     $newfile.Name
-    
+    } else {
+      "No newer files found"
+    }
     exit
   }
   Process{

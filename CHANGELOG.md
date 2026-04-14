@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.13] - 2026-04-14
+### Changed
+- WIP: backup distro, exit when not found
+
 ## [1.0.12] - 2026-04-09
 ### Changed
 - WIP: backup distro

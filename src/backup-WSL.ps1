@@ -25,7 +25,7 @@ PARAM (
 #------------------------------------------------------------------
 # START SET
   $debug = 1
-  $version = "0.3.9"
+  $version = "0.4.0"
   $app = "backup-WSL.ps1"
   $info = "backup WSL"
   $ld = "C:\tmp\log" 
@@ -56,16 +56,21 @@ function waitforenter {
 
 function check($distroparam) {
   # NEEDS rework: setup matrix: running, stopped vs known unknown
+  #             | running | stopped | known | unknown
+  # WSL F42     |         |         |       |    
+  # WSL F43     |         |         |       |    
   $wsllist = wsl --list
   $arrwsllist = $wsllist.Split("`r`n")
   # drop the empty lines ! 
+  $newarrwsllist = $arrwsllist.Where({ $_ -ne "" }) # drop empty lines
   Write-Output "Total distros in array-->" $arrwsllist.Count
+  Write-Output "Total distros in new array-->" $newarrwsllist.Count
   # $regexdistro = $distroparam+' (Standaard)'
   $regexdistro = $distroparam
-  "-----------M-"
+  "------------"
   $regexdistro
-  "-----------M-"
-  foreach ($item in $arrwsllist) {
+  "------------"
+  foreach ($item in $newarrwsllist) {
     $item
     if ($regexdistro -match $item) {
        Write-Host "MATCH found: $item"
@@ -210,7 +215,6 @@ foreach ($arg in $args)
 }
 $hdata = [string]$args[0]
 write-output $hdata
-#? write-output ">"$app$version
 "---------------------------------------------------"
 write-output $info $distro
 "---------------------------------------------------"
@@ -221,4 +225,4 @@ processdata;
 prunebackups;
 #####################################################
 writelog("--------------------------------------")	
-"EOF"
+

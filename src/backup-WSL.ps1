@@ -25,7 +25,7 @@ PARAM (
 #------------------------------------------------------------------
 # START SET
   $debug = 1
-  $version = "0.4.0"
+  $version = "0.4.1"
   $app = "backup-WSL.ps1"
   $info = "backup WSL"
   $ld = "C:\tmp\log" 
@@ -85,7 +85,6 @@ function check($distroparam) {
        Write-Host "no match found: $item - $regexdistro"
     }
   }
-  exit
   $wsllistrunning = wsl --list --running
   $arrwsllistrunning = $wsllistrunning.Split("`r`n")
   # check if multiple distros are spinning

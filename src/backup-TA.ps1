@@ -25,10 +25,10 @@ PARAM (
 #------------------------------------------------------------------
 # START SET
   $debug = 1
-  $version = "0.2.2"
+  $version = "0.2.3"
   $app = "backup-TA.ps1"
   $info = "backup TA"
-  $ld = "C:\tmp\log" 
+  $ld = "C:\tmp\log\" 
   if (!(Test-Path $ld)) { New-Item -ItemType Directory -Path $ld -Force }
   $srcdir = "g:\Mijn Drive\Team-August"
   $backupdir = "g:\.shortcut-targets-by-id\1DrNK512NxdJpe9m78nXETQv2OrIgAou9\Backup-Team-August"
@@ -38,7 +38,7 @@ $month = $month.substring($month.length - 2 , 2)
 $year = (get-date).year
 $da = "00"+(get-date).day 
 $dayn = $da.substring($da.length - 2,2)
-$log = $ld + "pslog_"+$year+$month+$dayn+".txt"
+$log = $ld + "B-TA-"+$year+$month+$dayn+".txt"
 #------------------------------------------------------------------
 ## Functions
 #------------------------------------------------------------------
@@ -59,6 +59,10 @@ function processgdoc(){
       # Explore ggl drive cmdlets https://www.go2share.net/article/google-drive-cmdlets
 }
 
+function get-datelastcheck(){
+  return '04/23/2026'
+}
+
 function processdata(){
   Param(
     [Parameter(Mandatory)][string]$datelastchecked
@@ -77,7 +81,9 @@ function processdata(){
     $newfile.FullName
     $newfile.Name
     } else {
-      "No newer files found"
+      $msg = "No newer files found"
+      $msg
+      writelog($msg)
     }
     exit
   }
@@ -133,8 +139,11 @@ $hdata = [string]$args[0]
 write-output $hdata
 "---------------------------------------------------"
 writelog(get-date)
-writelog($app+$version)
+writelog($app+" - v. "+$version)
 #####################################################
+$log
+$datelastcheck = get-datelastcheck
+$datelastcheck
 processdata;
 processgdoc;
       # Keep long names

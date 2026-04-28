@@ -25,7 +25,7 @@ PARAM (
 #------------------------------------------------------------------
 # START SET
   $debug = 1
-  $version = "0.2.3"
+  $version = "0.2.4"
   $app = "backup-TA.ps1"
   $info = "backup TA"
   $ld = "C:\tmp\log\" 
@@ -60,7 +60,12 @@ function processgdoc(){
 }
 
 function get-datelastcheck(){
-  return '04/23/2026'
+  # $lastlogfile = (Get-ChildItem -Path $ld *TA* | select-object LastWriteTime, FullName)
+  # ///////////////////////////// YAH /////////////////////////
+  "////////////////////////////////////////////////////////////"
+  Get-ChildItem -Path $ld *TA* | select-object LastWriteTime, FullName
+  "////////////////////////////////////////////////////////////"
+  return '04/24/2026'
 }
 
 function processdata(){

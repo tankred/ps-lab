@@ -25,7 +25,7 @@ PARAM (
 #------------------------------------------------------------------
 # START SET
   $debug = 1
-  $version = "0.2.4"
+  $version = "0.2.5"
   $app = "backup-TA.ps1"
   $info = "backup TA"
   $ld = "C:\tmp\log\" 
@@ -63,9 +63,11 @@ function get-datelastcheck(){
   # $lastlogfile = (Get-ChildItem -Path $ld *TA* | select-object LastWriteTime, FullName)
   # ///////////////////////////// YAH /////////////////////////
   "////////////////////////////////////////////////////////////"
-  Get-ChildItem -Path $ld *TA* | select-object LastWriteTime, FullName
+  $llf = (Get-ChildItem -Path $ld *TA* | select-object LastWriteTime, FullName | Sort-Object LastWriteTime -Descending | Select-Object -Skip 1 -First 1)
   "////////////////////////////////////////////////////////////"
-  return '04/24/2026'
+  # return "05/05/2026"
+  $llf
+  return $llf
 }
 
 function processdata(){
@@ -146,9 +148,11 @@ write-output $hdata
 writelog(get-date)
 writelog($app+" - v. "+$version)
 #####################################################
-$log
+# $log
 $datelastcheck = get-datelastcheck
+"YAH"
 $datelastcheck
+"YAH"
 processdata;
 processgdoc;
       # Keep long names

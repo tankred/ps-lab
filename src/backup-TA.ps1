@@ -25,7 +25,7 @@ PARAM (
 #------------------------------------------------------------------
 # START SET
   $debug = 1
-  $version = "0.2.5"
+  $version = "0.2.6"
   $app = "backup-TA.ps1"
   $info = "backup TA"
   $ld = "C:\tmp\log\" 
@@ -60,26 +60,26 @@ function processgdoc(){
 }
 
 function get-datelastcheck(){
-  # $lastlogfile = (Get-ChildItem -Path $ld *TA* | select-object LastWriteTime, FullName)
-  # ///////////////////////////// YAH /////////////////////////
-  "////////////////////////////////////////////////////////////"
   $llf = (Get-ChildItem -Path $ld *TA* | select-object LastWriteTime, FullName | Sort-Object LastWriteTime -Descending | Select-Object -Skip 1 -First 1)
-  "////////////////////////////////////////////////////////////"
-  # return "05/05/2026"
-  $llf
-  return $llf
+  $res = $llf.FullName.replace("C:\tmp\log\B-TA-","").replace(".txt","")
+  # convert to 'MM/dd/YYYY'
+  $yyyy = $res.substring(0,4)
+  $dd = $res.substring(6,2)
+  $MM = $res.substring(4,2)
+  $r = $MM + "/" + $dd + "/" + $yyyy 
+  return $r
 }
 
 function processdata(){
   Param(
-    [Parameter(Mandatory)][string]$datelastchecked
+    # [Parameter(Mandatory)][string]$datelastchecked
     # [string]$datelastchecked
   )
   Begin{
     # todo: Stop on invalid dateformat Error: "Cannot convert value "047/08/2026" to type "System.DateTime"
     "check GGL drive"
     "List files newer than specific date"
-    $newfile = (Get-ChildItem -Path $srcdir -Recurse | Where-Object { $_.LastWriteTime -ge $datelastchecked } | select-object FullName, LastWriteTime, Name)
+    $newfile = (Get-ChildItem -Path $srcdir -Recurse | Where-Object { $_.LastWriteTime -ge $datelastcheck } | select-object FullName, LastWriteTime, Name)
     $newfile.length
     if ($newfile.length -gt 0) { 
     $newfile.GetType().Name
@@ -150,7 +150,6 @@ writelog($app+" - v. "+$version)
 #####################################################
 # $log
 $datelastcheck = get-datelastcheck
-"YAH"
 $datelastcheck
 "YAH"
 processdata;

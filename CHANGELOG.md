@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [Released]
+
+## [1.1.0] - 2026-06-18
+### Changed
+- Bump version to 1.1.0
+
 ## [1.0.18] - 2026-06-15
 ### Changed
 - WIP: LOG datelastchecked
@@ -79,8 +85,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.1] - 2026-03-03
 ### Added
 - Backup team A (slog)
-
-## [Released]
 
 ## [1.0.0] - 2026-03-03
 ### Changed

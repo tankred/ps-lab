@@ -8,6 +8,84 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Released]
 
+## [1.1.0] - 2026-06-18
+### Changed
+- Bump version to 1.1.0
+
+## [1.0.18] - 2026-06-15
+### Changed
+- WIP: LOG datelastchecked
+
+## [1.0.17] - 2026-05-21
+### Changed
+- WIP: LOG datelastchecked
+
+## [1.0.16] - 2026-04-27
+### Changed
+- WIP: LOG datelastchecked
+
+## [1.0.15] - 2026-04-24
+### Changed
+- WIP: LOG datelastchecked
+
+## [1.0.14] - 2026-04-15
+### Changed
+- WIP: backup distro, exit when not found
+
+## [1.0.13] - 2026-04-14
+### Changed
+- WIP: backup distro, exit when not found
+
+## [1.0.12] - 2026-04-09
+### Changed
+- WIP: backup distro
+- WIP: List newer files in TA
+
+## [1.0.11] - 2026-04-08
+### Changed
+- WIP: Backup TA (last checked date see RTM)
+
+## [1.0.10] - 2026-03-30
+### Changed
+- WIP: Backup TA (last checked date 03/30/2026)
+
+## [1.0.9] - 2026-03-27
+### Changed
+- WIP: Backup TA (last checked date 03/27/2026)
+
+## [1.0.8] - 2026-03-12
+### Changed
+- Gen password (W11) 
+
+## [1.0.7] - 2026-03-12
+### Changed
+- Backup team A: list gdoc files 
+
+## [1.0.6] - 2026-03-10
+### Changed
+- Backup team A 
+- Show excluded gdoc file(s)
+
+## [1.0.5] - 2026-03-09
+### Changed
+- WIP: Backup team A 
+
+## [1.0.4] - 2026-03-06
+### Changed
+- Backup team A 
+
+## [1.0.3] - 2026-03-05
+### Changed
+- Backup team A, test write to linked ggl dir
+
+## [1.0.2] - 2026-03-04
+### Changed
+- Backup team A (slog)
+
+## [1.0.1] - 2026-03-03
+### Added
+- Backup team A (slog)
+
 ## [1.0.0] - 2026-03-03
 ### Changed
 - Merge backup distro

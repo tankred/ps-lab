@@ -25,7 +25,7 @@ PARAM (
 #------------------------------------------------------------------
 # START SET
   $debug = 1
-  $version = "0.4.1"
+  $version = "0.4.2"
   $app = "backup-WSL.ps1"
   $info = "backup WSL"
   $ld = "C:\tmp\log" 
@@ -41,24 +41,23 @@ $log = $ld + "pslog_"+$year+$month+$dayn+".txt"
 #------------------------------------------------------------------
 ## Functions
 #------------------------------------------------------------------
-# function writelog($e){
-# 	Add-Content $log $e""
-# }
 function writelog { param([string]$Message) try { Add-Content -Path $log -Value $Message } catch { Write-Warning "Kon niet naar logbestand schrijven: $_" } }
 
 function waitforenter {
-    param(
-        [string]$Message = "Press Enter to Continue..."
-    )
-    Write-Output $Message
-    $null = Read-Host
+  param(
+    [string]$Message = "Press Enter to Continue..."
+  )
+  Write-Output $Message
+  $null = Read-Host
 }
 
 function check($distroparam) {
   # NEEDS rework: setup matrix: running, stopped vs known unknown
   #             | running | stopped | known | unknown
-  # WSL F42     |         |         |       |    
-  # WSL F43     |         |         |       |    
+  # WSL F42     |    x    |         |       |    
+  # WSL F43     |         |    x    |       |    
+  # WSL ARCH    |         |    x    |       |    
+  # WSL UBUNTU  |         |    x    |       |    
   $wsllist = wsl --list
   $arrwsllist = $wsllist.Split("`r`n")
   # drop the empty lines ! 
@@ -150,11 +149,14 @@ function prunebackups() {
   }
 }
 
+function listdistro() {
+    wsl -l -v # show installed distro(s)"
+}
+
 function processdata(){
   Param()
   Begin{
     # $distro
-    # wsl -l -v # show installed distro(s)"
     check $distro
   }
   Process{
@@ -196,7 +198,7 @@ foreach ($arg in $args)
 #SAMPLE
 #PS > .\$app -h
 #PS > .\$app -V
-#PS > .\backup-WSL.ps1 -distro 'FedoraLinux-43'
+#PS > .\backup-WSL.ps1 -distro 'FedoraLinux-44'
 #
 #(END)
 "@;
@@ -220,6 +222,10 @@ write-output $info $distro
 writelog(get-date)
 writelog($app+$version)
 #####################################################
+$distrolist = listdistro
+$distrolist
+exit
+
 processdata;
 prunebackups;
 #####################################################

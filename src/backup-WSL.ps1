@@ -25,7 +25,7 @@ PARAM (
 #------------------------------------------------------------------
 # START SET
   $debug = 1
-  $version = "0.4.2"
+  $version = "0.4.3"
   $app = "backup-WSL.ps1"
   $info = "backup WSL"
   $ld = "C:\tmp\log" 
@@ -52,42 +52,24 @@ function waitforenter {
 }
 
 function check($distroparam) {
+  $distrofound = 0
   # NEEDS rework: setup matrix: running, stopped vs known unknown
   #             | running | stopped | known | unknown
   # WSL F42     |    x    |         |       |    
   # WSL F43     |         |    x    |       |    
   # WSL ARCH    |         |    x    |       |    
   # WSL UBUNTU  |         |    x    |       |    
+  # random wsl  |         |         |       |   x
   $wsllist = wsl --list
   $arrwsllist = $wsllist.Split("`r`n")
-  # drop the empty lines ! 
   $newarrwsllist = $arrwsllist.Where({ $_ -ne "" }) # drop empty lines
-  Write-Output "Total distros in array-->" $arrwsllist.Count
-  Write-Output "Total distros in new array-->" $newarrwsllist.Count
-  # $regexdistro = $distroparam+' (Standaard)'
-  $regexdistro = $distroparam
-  "------------"
-  $regexdistro
-  "------------"
   foreach ($item in $newarrwsllist) {
-    $item
-    if ($regexdistro -match $item) {
-       Write-Host "MATCH found: $item"
-    }  
-    if ($regexdistro -like $item) {
-       Write-Host "LIKE found: $item"
-    }  
-    if ($regexdistro -eq $item) {
+    if ($distroparam -eq $item) {
        Write-Host "Full match found: $item"
+       $distrofound = 1
     } 
-    if ($regexdistro -ne $item) {
-       Write-Host "no match found: $item - $regexdistro"
-    }
   }
-  $wsllistrunning = wsl --list --running
-  $arrwsllistrunning = $wsllistrunning.Split("`r`n")
   # check if multiple distros are spinning
-  Write-Output "Total running distros in array-->" $arrwsllistrunning.Count
   #   if ($wslinfo -eq 'Er zijn geen actieve distributies.') { 
   #     " Continue script " 
   #     "YAH"
@@ -130,6 +112,7 @@ function check($distroparam) {
   #       "-- END WSL INFO --"
   #       waitforenter
   #   }
+  $distrofound
 }
 
 function prunebackups() {
@@ -157,7 +140,6 @@ function processdata(){
   Param()
   Begin{
     # $distro
-    check $distro
   }
   Process{
     Try{
@@ -198,7 +180,7 @@ foreach ($arg in $args)
 #SAMPLE
 #PS > .\$app -h
 #PS > .\$app -V
-#PS > .\backup-WSL.ps1 -distro 'FedoraLinux-44'
+#PS > .\$app -distro 'FedoraLinux-44'
 #
 #(END)
 "@;
@@ -224,8 +206,12 @@ writelog($app+$version)
 #####################################################
 $distrolist = listdistro
 $distrolist
-exit
-
+$distrofound = check $distro
+$distrofound
+# YAH
+# WIP: check distro state
+# if running stop 
+# else continue backup
 processdata;
 prunebackups;
 #####################################################

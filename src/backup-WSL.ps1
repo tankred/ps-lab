@@ -25,7 +25,7 @@ PARAM (
 #------------------------------------------------------------------
 # START SET
   $debug = 1
-  $version = "0.4.3"
+  $version = "0.4.4"
   $app = "backup-WSL.ps1"
   $info = "backup WSL"
   $ld = "C:\tmp\log" 
@@ -51,6 +51,14 @@ function waitforenter {
   $null = Read-Host
 }
 
+function state($distroparam) {
+  $return = 'running'
+  $wsllistrunning = wsl --list --running -q
+  $wsllistrunning
+  
+  $return
+}
+
 function check($distroparam) {
   $distrofound = 0
   # NEEDS rework: setup matrix: running, stopped vs known unknown
@@ -69,49 +77,6 @@ function check($distroparam) {
        $distrofound = 1
     } 
   }
-  # check if multiple distros are spinning
-  #   if ($wslinfo -eq 'Er zijn geen actieve distributies.') { 
-  #     " Continue script " 
-  #     "YAH"
-  #     $distroparam
-  #       "--START WSL INFO --"
-  #       foreach ($item in $arrwslinfo) {
-  #         $item
-  #       }
-  #       "-- END WSL INFO --"
-  # 
-  #       "--START WSL INFO ALL --"
-  #       foreach ($item in $arrwslinfo) {
-  #         $item
-  #       }
-  #       "-- END WSL INFO ALL --"
-  # 
-  #     $arrwslinfoall
-  #     $exists = $arrwslinfoall -contains $distroparam
-  #     $exists
-  #     $matched = $arrwslinfoall | Select-String -Pattern $distroparam
-  #     Write-Host "WSL containing distro: $($matched.Line)"
-  #     Write-Host "distro exists in the array: $exists"
-  #     if (!$exists) {
-  #       "Distro not found ??"
-  #       # exit
-  #     }
-  #   }
-  #   else {
-  #     #? $arrwslinfo[2]
-  #       " IF $distroparam IS Running "
-  #       "--START WSL INFO --"
-  #       foreach ($item in $arrwslinfo) {
-  #         $item
-  #         if ($item -contains $distroparam) {
-  #           " HALT script "
-  #           " Send poweroff to running distro "
-  #           "sudo systemctl poweroff"
-  #         } 
-  #       }
-  #       "-- END WSL INFO --"
-  #       waitforenter
-  #   }
   $distrofound
 }
 
@@ -144,11 +109,10 @@ function processdata(){
   Process{
     Try{
       $BACKUPDISTRO=$distro
-      "# backup distro $BACKUPDISTRO "
+      "# terminate and backup distro $BACKUPDISTRO "
       wsl --terminate $BACKUPDISTRO # stop distro 
-      # backup distro AND will stop a distro from running
       $target = $backupdir + "\wsl-" + $BACKUPDISTRO + "-" + $year + $month + $dayn + ".tar"
-      $target
+      # $target
       wsl --export $BACKUPDISTRO $target
     }
     Catch{
@@ -208,11 +172,18 @@ $distrolist = listdistro
 $distrolist
 $distrofound = check $distro
 $distrofound
-# YAH
-# WIP: check distro state
-# if running stop 
-# else continue backup
-processdata;
+if ($distrofound -eq 1) { 
+  # YAH
+  # WIP: check distro state
+  $distrostate = state $distro
+  $distrostate
+  # if running stop 
+  # else continue backup
+  processdata;
+} else {
+  "distro not found"
+  "Please provide a distro from the list"
+}
 prunebackups;
 #####################################################
 writelog("--------------------------------------")	

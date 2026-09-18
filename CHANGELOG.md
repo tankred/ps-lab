@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [Released]
+
+## [1.1.5] - 2026-09-18
+### Changed
+- Catch unknown distro 
+
 ## [1.1.4] - 2026-09-15
 ### Changed
 - WIP catch unknown distro 
@@ -21,8 +27,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.1.1] - 2026-09-08
 ### Changed
 - WIP catch unknown distro 
-
-## [Released]
 
 ## [1.1.0] - 2026-06-18
 ### Changed

@@ -25,7 +25,7 @@ PARAM (
 #------------------------------------------------------------------
 # START SET
   $debug = 1
-  $version = "0.4.1"
+  $version = "0.4.4"
   $app = "backup-WSL.ps1"
   $info = "backup WSL"
   $ld = "C:\tmp\log" 
@@ -41,96 +41,43 @@ $log = $ld + "pslog_"+$year+$month+$dayn+".txt"
 #------------------------------------------------------------------
 ## Functions
 #------------------------------------------------------------------
-# function writelog($e){
-# 	Add-Content $log $e""
-# }
 function writelog { param([string]$Message) try { Add-Content -Path $log -Value $Message } catch { Write-Warning "Kon niet naar logbestand schrijven: $_" } }
 
 function waitforenter {
-    param(
-        [string]$Message = "Press Enter to Continue..."
-    )
-    Write-Output $Message
-    $null = Read-Host
+  param(
+    [string]$Message = "Press Enter to Continue..."
+  )
+  Write-Output $Message
+  $null = Read-Host
+}
+
+function state($distroparam) {
+  $return = 'running'
+  $wsllistrunning = wsl --list --running -q
+  $wsllistrunning
+  
+  $return
 }
 
 function check($distroparam) {
+  $distrofound = 0
   # NEEDS rework: setup matrix: running, stopped vs known unknown
   #             | running | stopped | known | unknown
-  # WSL F42     |         |         |       |    
-  # WSL F43     |         |         |       |    
+  # WSL F42     |    x    |         |       |    
+  # WSL F43     |         |    x    |       |    
+  # WSL ARCH    |         |    x    |       |    
+  # WSL UBUNTU  |         |    x    |       |    
+  # random wsl  |         |         |       |   x
   $wsllist = wsl --list
   $arrwsllist = $wsllist.Split("`r`n")
-  # drop the empty lines ! 
   $newarrwsllist = $arrwsllist.Where({ $_ -ne "" }) # drop empty lines
-  Write-Output "Total distros in array-->" $arrwsllist.Count
-  Write-Output "Total distros in new array-->" $newarrwsllist.Count
-  # $regexdistro = $distroparam+' (Standaard)'
-  $regexdistro = $distroparam
-  "------------"
-  $regexdistro
-  "------------"
   foreach ($item in $newarrwsllist) {
-    $item
-    if ($regexdistro -match $item) {
-       Write-Host "MATCH found: $item"
-    }  
-    if ($regexdistro -like $item) {
-       Write-Host "LIKE found: $item"
-    }  
-    if ($regexdistro -eq $item) {
+    if ($distroparam -eq $item) {
        Write-Host "Full match found: $item"
+       $distrofound = 1
     } 
-    if ($regexdistro -ne $item) {
-       Write-Host "no match found: $item - $regexdistro"
-    }
   }
-  $wsllistrunning = wsl --list --running
-  $arrwsllistrunning = $wsllistrunning.Split("`r`n")
-  # check if multiple distros are spinning
-  Write-Output "Total running distros in array-->" $arrwsllistrunning.Count
-  #   if ($wslinfo -eq 'Er zijn geen actieve distributies.') { 
-  #     " Continue script " 
-  #     "YAH"
-  #     $distroparam
-  #       "--START WSL INFO --"
-  #       foreach ($item in $arrwslinfo) {
-  #         $item
-  #       }
-  #       "-- END WSL INFO --"
-  # 
-  #       "--START WSL INFO ALL --"
-  #       foreach ($item in $arrwslinfo) {
-  #         $item
-  #       }
-  #       "-- END WSL INFO ALL --"
-  # 
-  #     $arrwslinfoall
-  #     $exists = $arrwslinfoall -contains $distroparam
-  #     $exists
-  #     $matched = $arrwslinfoall | Select-String -Pattern $distroparam
-  #     Write-Host "WSL containing distro: $($matched.Line)"
-  #     Write-Host "distro exists in the array: $exists"
-  #     if (!$exists) {
-  #       "Distro not found ??"
-  #       # exit
-  #     }
-  #   }
-  #   else {
-  #     #? $arrwslinfo[2]
-  #       " IF $distroparam IS Running "
-  #       "--START WSL INFO --"
-  #       foreach ($item in $arrwslinfo) {
-  #         $item
-  #         if ($item -contains $distroparam) {
-  #           " HALT script "
-  #           " Send poweroff to running distro "
-  #           "sudo systemctl poweroff"
-  #         } 
-  #       }
-  #       "-- END WSL INFO --"
-  #       waitforenter
-  #   }
+  $distrofound
 }
 
 function prunebackups() {
@@ -150,21 +97,22 @@ function prunebackups() {
   }
 }
 
+function listdistro() {
+    wsl -l -v # show installed distro(s)"
+}
+
 function processdata(){
   Param()
   Begin{
     # $distro
-    # wsl -l -v # show installed distro(s)"
-    check $distro
   }
   Process{
     Try{
       $BACKUPDISTRO=$distro
-      "# backup distro $BACKUPDISTRO "
+      "# terminate and backup distro $BACKUPDISTRO "
       wsl --terminate $BACKUPDISTRO # stop distro 
-      # backup distro AND will stop a distro from running
       $target = $backupdir + "\wsl-" + $BACKUPDISTRO + "-" + $year + $month + $dayn + ".tar"
-      $target
+      # $target
       wsl --export $BACKUPDISTRO $target
     }
     Catch{
@@ -196,7 +144,7 @@ foreach ($arg in $args)
 #SAMPLE
 #PS > .\$app -h
 #PS > .\$app -V
-#PS > .\backup-WSL.ps1 -distro 'FedoraLinux-43'
+#PS > .\$app -distro 'FedoraLinux-44'
 #
 #(END)
 "@;
@@ -220,7 +168,22 @@ write-output $info $distro
 writelog(get-date)
 writelog($app+$version)
 #####################################################
-processdata;
+$distrolist = listdistro
+$distrolist
+$distrofound = check $distro
+$distrofound
+if ($distrofound -eq 1) { 
+  # YAH
+  # WIP: check distro state
+  $distrostate = state $distro
+  $distrostate
+  # if running stop 
+  # else continue backup
+  processdata;
+} else {
+  "distro not found"
+  "Please provide a distro from the list"
+}
 prunebackups;
 #####################################################
 writelog("--------------------------------------")	

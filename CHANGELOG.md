@@ -8,6 +8,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Released]
 
+## [1.1.5] - 2026-09-18
+### Changed
+- Catch unknown distro 
+
+## [1.1.4] - 2026-09-15
+### Changed
+- WIP catch unknown distro 
+
+## [1.1.3] - 2026-09-10
+### Changed
+- WIP catch unknown distro 
+
+## [1.1.2] - 2026-09-09
+### Changed
+- WIP catch unknown distro 
+
+## [1.1.1] - 2026-09-08
+### Changed
+- WIP catch unknown distro 
+
 ## [1.1.0] - 2026-06-18
 ### Changed
 - Bump version to 1.1.0

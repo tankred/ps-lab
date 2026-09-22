@@ -25,7 +25,7 @@ PARAM (
 #------------------------------------------------------------------
 # START SET
   $debug = 1
-  $version = "0.4.4"
+  $version = "0.5.0"
   $app = "backup-WSL.ps1"
   $info = "backup WSL"
   $ld = "C:\tmp\log" 
@@ -52,11 +52,17 @@ function waitforenter {
 }
 
 function state($distroparam) {
-  $return = 'running'
+  $distrostate = 0
   $wsllistrunning = wsl --list --running -q
   $wsllistrunning
-  
-  $return
+  $wslarrayrunning = $wsllistrunning.Split("`r`n")
+  foreach ($item in $wslarrayrunning) {
+    if ($distroparam -eq $item) {
+       Write-Host "Running match found: $item"
+       $distrostate = 1
+    } 
+  }
+  $distrostate
 }
 
 function check($distroparam) {
@@ -68,10 +74,9 @@ function check($distroparam) {
   # WSL ARCH    |         |    x    |       |    
   # WSL UBUNTU  |         |    x    |       |    
   # random wsl  |         |         |       |   x
-  $wsllist = wsl --list
-  $arrwsllist = $wsllist.Split("`r`n")
-  $newarrwsllist = $arrwsllist.Where({ $_ -ne "" }) # drop empty lines
-  foreach ($item in $newarrwsllist) {
+  $wsllist = wsl --list -q
+  $wslarray = $wsllist.Split("`r`n")
+  foreach ($item in $wslarray) {
     if ($distroparam -eq $item) {
        Write-Host "Full match found: $item"
        $distrofound = 1
@@ -168,18 +173,19 @@ write-output $info $distro
 writelog(get-date)
 writelog($app+$version)
 #####################################################
-$distrolist = listdistro
-$distrolist
+# $distrolist = listdistro
+# $distrolist
 $distrofound = check $distro
 $distrofound
 if ($distrofound -eq 1) { 
-  # YAH
-  # WIP: check distro state
   $distrostate = state $distro
   $distrostate
-  # if running stop 
-  # else continue backup
-  processdata;
+  if ($distrostate -eq 1) {
+    "Stop $distro to backup" 
+    exit
+  } else { # continue backup
+    processdata;
+  }
 } else {
   "distro not found"
   "Please provide a distro from the list"

@@ -25,7 +25,7 @@ PARAM (
 #------------------------------------------------------------------
 # START SET
   $debug = 1
-  $version = "0.5.0"
+  $version = "0.5.1"
   $app = "backup-WSL.ps1"
   $info = "backup WSL"
   $ld = "C:\tmp\log" 
@@ -191,6 +191,7 @@ if ($distrofound -eq 1) {
   "Please provide a distro from the list"
 }
 prunebackups;
+"backup location: $backupdir"
 #####################################################
 writelog("--------------------------------------")	
 
